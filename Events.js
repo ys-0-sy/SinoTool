@@ -1,26 +1,34 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Image } from "react-native";
 import { Timer } from "./components/Timer";
 
 export class Events extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      endDate: new Date(Date.UTC(2019, 11, 12, 3, 4, 5))
+    };
+  }
   render() {
     return (
-      <View style={styles.base_box}>
-        <View style={styles.content_box}>
-          <Timer />
-        </View>
+      <View style={styles.container}>
+        <Image style={styles.image} source={require("./assets/event1.png")} />
+        <Timer endDate={this.state.endDate} />
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  base_box: {
-    borderWidth: 1,
-    borderRadius: 3,
-    borderColor: "#707070"
+  image: {
+    flex: 1,
+    height: 75,
+    resizeMode: "contain"
   },
-  content_box: {
-    margin: 10
+  container: {
+    flexDirection: "row",
+    alignContent: "center",
+    alignSelf: "center",
+    margin: 3
   }
 });
