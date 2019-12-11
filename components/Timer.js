@@ -10,16 +10,26 @@ export class Timer extends Component {
   }
 
   diffCurrentTime = targetDate => {
-    const diffTime = Math.floor((targetDate - new Date()) / 1000);
-    const daySec = 60 * 60 * 24;
-    const hourSec = 60;
-    const minuteSec = 60;
-    const second = diffTime % minuteSec;
-    const minute = Math.floor(diffTime / minuteSec) % hourSec;
-    const hour = Math.floor(diffTime / (hourSec * minuteSec)) % daySec;
-    const day = Math.floor(diffTime / (hourSec * minuteSec * daySec));
-    return `${day}日 ${hour}:${minute}`;
+    console.log(this.isUndefined(targetDate))
+    if (this.isUndefined(targetDate)) {
+      return "-日 --:--"
+    } else {
+      const diffTime = Math.floor((targetDate - new Date()) / 1000);
+      const daySec = 60 * 60 * 24;
+      const hourSec = 60;
+      const minuteSec = 60;
+      const second = diffTime % minuteSec;
+      const minute = Math.floor(diffTime / minuteSec) % hourSec;
+      const hour = Math.floor(diffTime / (hourSec * minuteSec)) % daySec;
+      const day = Math.floor(diffTime / (hourSec * minuteSec * daySec));
+      return `${day}日 ${hour}:${minute}`;
+    }
+
   };
+
+  isUndefined = valiable => {
+    return (typeof valiable === 'undefined')
+  }
 
   componentDidMount() {
     setInterval(() => {

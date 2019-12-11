@@ -4,6 +4,12 @@ import { Header } from "./Header";
 import { Events } from "./Events";
 
 export default class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      endDate: new Date(Date.UTC(2019, 11, 12, 3, 4, 5))
+    }
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -11,7 +17,7 @@ export default class App extends Component {
         <SafeAreaView style={styles.content_block}>
           <Text style={styles.title_bold}>開催中のイベント</Text>
           <View style={styles.base_box}>
-            <Events />
+            <Events endDate={this.state.endDate} />
             <Events />
             <Events />
           </View>

@@ -5,15 +5,12 @@ import { Timer } from "./components/Timer";
 export class Events extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      endDate: new Date(Date.UTC(2019, 11, 12, 3, 4, 5))
-    };
   }
   render() {
     return (
       <View style={styles.container}>
         <Image style={styles.image} source={require("./assets/event1.png")} />
-        <Timer endDate={this.state.endDate} />
+        <Timer endDate={this.props.endDate} />
       </View>
     );
   }
