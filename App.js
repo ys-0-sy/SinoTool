@@ -2,8 +2,34 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { Header } from "./Header";
 import { Events } from "./Events";
+import firebase from "./firebase";
+import firestore from "@firebase/firestore";
 
 export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      doc: String
+    };
+    console.log("constructor");
+
+    const db = firebase.firestore();
+    console.log("test");
+    db.collection("users")
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          this.setState({
+            doc: doc
+          });
+          console.log(doc.id, "=>", doc.data());
+        });
+      })
+      .catch(err => {
+        console.log("Error getting documents", err);
+      });
+  }
+
   render() {
     return (
       <View style={styles.container}>
