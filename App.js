@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { Header } from "./Header";
 import { Events } from "./Events";
+import firebase from "./firebase";
+import firestore from "@firebase/firestore";
 
 export default class App extends Component {
   constructor(props) {
@@ -10,27 +12,50 @@ export default class App extends Component {
       endDate: new Date(Date.UTC(2019, 11, 12, 3, 4, 5))
     }
   }
-  render() {
-    return (
-      <View style={styles.container}>
-        <Header />
-        <SafeAreaView style={styles.content_block}>
-          <Text style={styles.title_bold}>開催中のイベント</Text>
-          <View style={styles.base_box}>
-            <Events endDate={this.state.endDate} />
-            <Events />
-            <Events />
-          </View>
-        </SafeAreaView>
-        <SafeAreaView style={styles.content_block}>
-          <Text style={styles.title_bold}>討伐イベント</Text>
-          <View style={styles.base_box}>
-            <Events />
-          </View>
-        </SafeAreaView>
-      </View>
-    );
+  super(props);
+    this.state = {
+  doc: String
+};
+console.log("constructor");
+
+const db = firebase.firestore();
+console.log("test");
+db.collection("users")
+  .get()
+  .then(snapshot => {
+    snapshot.forEach(doc => {
+      this.setState({
+        doc: doc
+      });
+      console.log(doc.id, "=>", doc.data());
+    });
+  })
+  .catch(err => {
+    console.log("Error getting documents", err);
+  });
   }
+
+render() {
+  return (
+    <View style={styles.container}>
+      <Header />
+      <SafeAreaView style={styles.content_block}>
+        <Text style={styles.title_bold}>開催中のイベント</Text>
+        <View style={styles.base_box}>
+          <Events endDate={this.state.endDate} />
+          <Events />
+          <Events />
+        </View>
+      </SafeAreaView>
+      <SafeAreaView style={styles.content_block}>
+        <Text style={styles.title_bold}>討伐イベント</Text>
+        <View style={styles.base_box}>
+          <Events />
+        </View>
+      </SafeAreaView>
+    </View>
+  );
+}
 }
 
 const styles = StyleSheet.create({
