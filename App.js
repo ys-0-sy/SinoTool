@@ -7,55 +7,66 @@ import firestore from "@firebase/firestore";
 
 export default class App extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      endDate: new Date(Date.UTC(2019, 11, 12, 3, 4, 5))
+      events: {
+        name: String,
+        endDate: new Date()
+      }
     }
   }
-  super(props);
-    this.state = {
-  doc: String
-};
-console.log("constructor");
-
-const db = firebase.firestore();
-console.log("test");
-db.collection("users")
-  .get()
-  .then(snapshot => {
-    snapshot.forEach(doc => {
-      this.setState({
-        doc: doc
+  fetchEventsData = () => {
+    const db = firebase.firestore();
+    db.collection("events")
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(event => {
+          this.setState({
+            events: {
+              name: event.data().name,
+              endDate: new Date(event.data().endDate.seconds * 1000)
+            }
+          });
+          console.log(event.id, "=>", event.data());
+          console.log(this.state.events.endDate)
+        });
+      })
+      .catch(err => {
+        console.log("Error getting documents", err);
       });
-      console.log(doc.id, "=>", doc.data());
-    });
-  })
-  .catch(err => {
-    console.log("Error getting documents", err);
-  });
   }
 
-render() {
-  return (
-    <View style={styles.container}>
-      <Header />
-      <SafeAreaView style={styles.content_block}>
-        <Text style={styles.title_bold}>開催中のイベント</Text>
-        <View style={styles.base_box}>
-          <Events endDate={this.state.endDate} />
-          <Events />
-          <Events />
-        </View>
-      </SafeAreaView>
-      <SafeAreaView style={styles.content_block}>
-        <Text style={styles.title_bold}>討伐イベント</Text>
-        <View style={styles.base_box}>
-          <Events />
-        </View>
-      </SafeAreaView>
-    </View>
-  );
-}
+  componentWillMount() {
+    this.fetchEventsData()
+  }
+
+  componentDidMount() {
+
+    setInterval(() => {
+      console.log(this.state.events.endDate)
+    }, 1000);
+  }
+  render() {
+    return (
+      <View style={styles.container}>
+        <Header />
+        <SafeAreaView style={styles.content_block}>
+          <Text style={styles.title_bold}>開催中のイベント</Text>
+          <View style={styles.base_box}>
+            <Events endDate={this.state.events.endDate} />
+            <Events />
+            <Events />
+          </View>
+        </SafeAreaView>
+        <SafeAreaView style={styles.content_block}>
+          <Text style={styles.title_bold}>討伐イベント</Text>
+          <View style={styles.base_box}>
+            <Events />
+          </View>
+        </SafeAreaView>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({

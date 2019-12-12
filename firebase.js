@@ -7,8 +7,8 @@ const firebaseConfig = {
   projectId: "sinotool-3973b",
   storageBucket: "sinotool-3973b.appspot.com",
   messagingSenderId: "520865910956",
-  appId: "1:520865910956:web:50762910a995aa9d124f09",
-  measurementId: "G-86WWLVLCDP"
+  appId: "1:520865910956:web:004ed1a141a3b273124f09",
+  measurementId: "G-XNNMMNP599"
 };
 
 // Initialize Firebase
