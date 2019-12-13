@@ -1,18 +1,41 @@
 import React, { Component } from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
 import { Timer } from "./components/Timer";
+import firebase from "./firebase";
 
 export class Events extends Component {
   constructor(props) {
     super(props);
   }
+
+  isUndefined = valiable => {
+    return (typeof valiable === 'undefined')
+  }
+
   render() {
     return (
-      <View style={styles.container}>
-        <Image style={styles.image} source={require("./assets/event1.png")} />
-        <Timer endDate={this.props.endDate} />
+      <View>
+        {this.props.events.map((event) => {
+          console.log(event.imgPath)
+          if (this.isUndefined(event)) {
+            return (
+              <View style={styles.container}>
+                <Image style={styles.image} source={require("./assets/event1.png")} />
+                <Timer />
+              </View>
+            )
+          } else {
+            return (
+              <View style={styles.container}>
+                <Image style={styles.image} source={require("./assets/event1.png")} loadingIndicatorSource={require("./assets/event1.png")} />
+                <Timer endDate={event.endDate} />
+              </View>
+            )
+          }
+        })
+        }
       </View>
-    );
+    )
   }
 }
 
