@@ -9,11 +9,8 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      events: {
-        name: String,
-        endDate: new Date()
-      }
-    }
+      events: new Array()
+    };
   }
   fetchEventsData = () => {
     const db = firebase.firestore();
@@ -22,28 +19,26 @@ export default class App extends Component {
       .then(snapshot => {
         snapshot.forEach(event => {
           this.setState({
-            events: {
+            events: this.state.events.concat({
               name: event.data().name,
               endDate: new Date(event.data().endDate.seconds * 1000)
-            }
+            })
           });
-          console.log(event.id, "=>", event.data());
-          console.log(this.state.events.endDate)
+          console.log(this.state.events);
         });
       })
       .catch(err => {
         console.log("Error getting documents", err);
       });
-  }
+  };
 
   componentWillMount() {
-    this.fetchEventsData()
+    this.fetchEventsData();
   }
 
   componentDidMount() {
-
     setInterval(() => {
-      console.log(this.state.events.endDate)
+      console.log(this.state.events);
     }, 1000);
   }
   render() {
@@ -53,9 +48,7 @@ export default class App extends Component {
         <SafeAreaView style={styles.content_block}>
           <Text style={styles.title_bold}>開催中のイベント</Text>
           <View style={styles.base_box}>
-            <Events endDate={this.state.events.endDate} />
-            <Events />
-            <Events />
+            <Events events={this.state.events} />;
           </View>
         </SafeAreaView>
         <SafeAreaView style={styles.content_block}>

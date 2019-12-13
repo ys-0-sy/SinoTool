@@ -6,13 +6,25 @@ export class Events extends Component {
   constructor(props) {
     super(props);
   }
+
+  event = props => {
+    <View style={styles.container}>
+      <Image style={styles.image} source={require("./assets/event1.png")} />
+      <Timer endDate={this.props.endDate} />
+    </View>;
+  };
+
+  isPrimitive = () => {
+    console.log(this.props.events.length === 0);
+    if (this.props.events.length !== 0) {
+      return <Text>"not 0"</Text>;
+    } else {
+      return <Text>"aa"</Text>;
+    }
+  };
+
   render() {
-    return (
-      <View style={styles.container}>
-        <Image style={styles.image} source={require("./assets/event1.png")} />
-        <Timer endDate={this.props.endDate} />
-      </View>
-    );
+    return <View>{this.isPrimitive()}</View>;
   }
 }
 
