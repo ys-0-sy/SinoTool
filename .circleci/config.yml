@@ -41,7 +41,7 @@ jobs:
           command: yarn install --frozen-lockfile
       - run:
           name: react-nativeへ変換
-          command: yarn expo eject --eject-method bare
+          command: yarn expo eject --eject-method bare --non-interactive
       - save_yarn
 
 workflows:
