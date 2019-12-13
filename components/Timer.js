@@ -19,7 +19,7 @@ export class Timer extends Component {
       const hour = Math.floor((diffTime - day) * 60);
       const minute = Math.floor(((diffTime - day) * 60 - hour) * 60);
       const second = diffTime;
-      console.log((diffTime - day) * 60 - hour)
+      //console.log((diffTime - day) * 60 - hour)
       return `${day}日 ${hour}:${minute}`;
     }
 

@@ -12,7 +12,7 @@ export default class App extends Component {
       events: new Array()
     };
   }
-  fetchEventsData = () => {
+  fetchEventsData = async () => {
     const db = firebase.firestore();
     db.collection("events")
       .get()
@@ -21,7 +21,8 @@ export default class App extends Component {
           this.setState({
             events: this.state.events.concat({
               name: event.data().name,
-              endDate: new Date(event.data().endDate.seconds * 1000)
+              endDate: new Date(event.data().endDate.seconds * 1000),
+              imgPath: event.data().imgPath
             })
           });
           console.log(this.state.events);
@@ -31,6 +32,16 @@ export default class App extends Component {
         console.log("Error getting documents", err);
       });
   };
+
+  parseImgUrl = async (path) => {
+    const storageRef = firebase.storage().ref()
+    await storageRef.child(path)
+      .getDownloadURL()
+      .then((url) => {
+        console.log(url)
+        return url
+      })
+  }
 
   componentWillMount() {
     this.fetchEventsData();
