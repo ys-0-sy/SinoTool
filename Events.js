@@ -7,24 +7,37 @@ export class Events extends Component {
     super(props);
   }
 
-  event = props => {
-    <View style={styles.container}>
-      <Image style={styles.image} source={require("./assets/event1.png")} />
-      <Timer endDate={this.props.endDate} />
-    </View>;
-  };
-
-  isPrimitive = () => {
-    console.log(this.props.events.length === 0);
-    if (this.props.events.length !== 0) {
-      return <Text>"not 0"</Text>;
+  event = (event) => {
+    console.log(this.isUndefined(event))
+    if (this.isUndefined(event)) {
+      return (
+        <View style={styles.container}>
+          <Image style={styles.image} source={require("./assets/event1.png")} />
+          <Timer />
+        </View>
+      )
     } else {
-      return <Text>"aa"</Text>;
+      return (
+        <View style={styles.container}>
+          <Image style={styles.image} source={require("./assets/event1.png")} />
+          <Timer endDate={event.endDate} />
+        </View>
+      )
     }
-  };
-
+  }
+  isUndefined = valiable => {
+    return (typeof valiable === 'undefined')
+  }
   render() {
-    return <View>{this.isPrimitive()}</View>;
+    return (
+      <View>
+        {this.props.events.map(event => {
+          return (
+            this.event(event)
+          )
+        })}
+      </View>
+    )
   }
 }
 

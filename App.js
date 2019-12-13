@@ -36,11 +36,6 @@ export default class App extends Component {
     this.fetchEventsData();
   }
 
-  componentDidMount() {
-    setInterval(() => {
-      console.log(this.state.events);
-    }, 1000);
-  }
   render() {
     return (
       <View style={styles.container}>
@@ -48,13 +43,13 @@ export default class App extends Component {
         <SafeAreaView style={styles.content_block}>
           <Text style={styles.title_bold}>開催中のイベント</Text>
           <View style={styles.base_box}>
-            <Events events={this.state.events} />;
+            <Events events={this.state.events} />
           </View>
         </SafeAreaView>
         <SafeAreaView style={styles.content_block}>
           <Text style={styles.title_bold}>討伐イベント</Text>
           <View style={styles.base_box}>
-            <Events />
+            <Events events={this.state.events} />
           </View>
         </SafeAreaView>
       </View>
