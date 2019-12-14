@@ -1,53 +1,59 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, Image } from "react-native";
 import { Header } from "./Header";
 import { Events } from "./Events";
 import firebase from "./firebase";
 import firestore from "@firebase/firestore";
+import { AppLoading, SplashScreen } from "expo";
+import { Asset } from "expo-asset";
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      events: new Array()
+      events: new Array(),
+      isSplashReady: false,
+      isAppReady: false
     };
   }
-  fetchEventsData = async () => {
-    const db = firebase.firestore();
-    db.collection("events")
-      .get()
-      .then(snapshot => {
-        snapshot.forEach(event => {
-          this.setState({
-            events: this.state.events.concat({
-              name: event.data().name,
-              endDate: new Date(event.data().endDate.seconds * 1000),
-              imgPath: event.data().imgPath
-            })
-          });
-          console.log(this.state.events);
-        });
-      })
-      .catch(err => {
-        console.log("Error getting documents", err);
+  fetchEventsData = async () => {};
+
+  parseImgUrl = async path => {
+    const storageRef = firebase.storage().ref();
+    await storageRef
+      .child(path)
+      .getDownloadURL()
+      .then(url => {
+        console.log(url);
+        return url;
       });
   };
-
-  parseImgUrl = async (path) => {
-    const storageRef = firebase.storage().ref()
-    await storageRef.child(path)
-      .getDownloadURL()
-      .then((url) => {
-        console.log(url)
-        return url
-      })
-  }
 
   componentWillMount() {
     this.fetchEventsData();
   }
 
   render() {
+    if (!this.state.isSplashReady) {
+      return (
+        <AppLoading
+          startAsync={this._cacheSplashResourcesAsync}
+          onFinish={() => this.setState({ isSplashReady: true })}
+          onError={console.warn}
+          autoHideSplash={false}
+        />
+      );
+    }
+    if (!this.state.isAppReady) {
+      return (
+        <View style={{ flex: 1 }}>
+          <Image
+            source={require("./assets/images/splash.gif")}
+            onLoad={this._cacheResourcesAsync}
+          />
+        </View>
+      );
+    }
     return (
       <View style={styles.container}>
         <Header />
@@ -66,6 +72,37 @@ export default class App extends Component {
       </View>
     );
   }
+
+  _cacheSplashResourcesAsync = async () => {
+    const gif = require("./assets/images/splash.gif");
+    return Asset.fromModule(gif).downloadAsync();
+  };
+
+  _cacheResourcesAsync = async () => {
+    SplashScreen.hide();
+    const db = firebase.firestore();
+    const fetchDb = async () => {
+      db.collection("events")
+        .get()
+        .then(snapshot => {
+          snapshot.forEach(event => {
+            this.setState({
+              events: this.state.events.concat({
+                name: event.data().name,
+                endDate: new Date(event.data().endDate.seconds * 1000),
+                imgPath: event.data().imgPath
+              })
+            });
+            console.log(this.state.events);
+          });
+        })
+        .catch(err => {
+          console.log("Error getting documents", err);
+        });
+    };
+    await Promise.all(fetchDb());
+    this.setState({ isAppReady: true });
+  };
 }
 
 const styles = StyleSheet.create({
