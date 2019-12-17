@@ -17,21 +17,7 @@ export default class App extends Component {
     };
   }
 
-  parseImgUrl = async path => {
-    const storageRef = firebase.storage().ref();
-    return new Promise(() => {
-      storageRef
-        .child(path)
-        .getDownloadURL()
-        .then(url => {
-          return url;
-        });
-    })
-  };
-
-  componentWillMount() {
-
-  }
+  componentWillMount() {}
 
   render() {
     if (!this.state.isSplashReady) {
@@ -86,12 +72,12 @@ export default class App extends Component {
         .get()
         .then(snapshot => {
           snapshot.forEach(event => {
-            const imgPath = this.parseImgUrl(event.data().image)
+            const imgPath = event.data().image;
             this.setState({
               events: this.state.events.concat({
                 name: event.data().name,
                 endDate: new Date(event.data().endDate.seconds * 1000),
-                imgPath: imgPath
+                imgPath: event.data().image
               })
             });
           });
