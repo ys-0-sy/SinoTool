@@ -3,9 +3,9 @@ import { StyleSheet, Text, View, SafeAreaView, Image } from "react-native";
 import { Header } from "./Header";
 import { Events } from "./Events";
 import firebase from "./firebase";
-import firestore from "@firebase/firestore";
 import { AppLoading, SplashScreen } from "expo";
 import { Asset } from "expo-asset";
+import firestore from '@firebase/firestore'
 
 export default class App extends Component {
   constructor(props) {
@@ -17,7 +17,23 @@ export default class App extends Component {
     };
   }
 
-  componentWillMount() {}
+  componentDidUpdate() {
+    this.state.events.forEach((event, index) => {
+      if (typeof event.imgUrl === "undefined") {
+        const storageRef = firebase.storage().ref();
+        return storageRef
+          .child(event.imgPath)
+          .getDownloadURL()
+          .then(url => {
+            const newStateEvents = this.state.events
+            newStateEvents[index].imgUrl = url
+            this.setState({
+              events: newStateEvents
+            })
+          });
+      }
+    })
+  }
 
   render() {
     if (!this.state.isSplashReady) {

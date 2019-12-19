@@ -1,38 +1,17 @@
 import { Platform } from "react-native";
-import firebase from "react-native-firebase";
+import firebase from "firebase";
 
-const iosConfig = {
-  clientId:
-    "520865910956-90kvvf9ghn22hnvlo3jdnc88sdh16gg6.apps.googleusercontent.com",
-  appId: "x",
-  apiKey: "AIzaSyAdtuSGu4KHztaqskP_84bMEeUG-ytGEt0",
+const firebaseConfig = {
+  apiKey: "AIzaSyCaBK5yrFrfEHV6SzSnLHF5gYSvv9UaZ4w",
+  authDomain: "sinotool-3973b.firebaseapp.com",
   databaseURL: "https://sinotool-3973b.firebaseio.com",
+  projectId: "sinotool-3973b",
   storageBucket: "sinotool-3973b.appspot.com",
   messagingSenderId: "520865910956",
-  projectId: "sinotool-3973b",
-
-  // enable persistence by adding the below flag
-  persistence: true
+  appId: "1:520865910956:web:004ed1a141a3b273124f09",
+  measurementId: "G-XNNMMNP599"
 };
 
-const androidConfig = {
-  clientId: "x",
-  appId: "x",
-  apiKey: "x",
-  databaseURL: "x",
-  storageBucket: "x",
-  messagingSenderId: "x",
-  projectId: "x",
-
-  // enable persistence by adding the below flag
-  persistence: true
-};
-
-const SinoToolApp = firebase.initializeApp(
-  // use platform specific firebase config
-  Platform.OS === "ios" ? iosConfig : androidConfig,
-  // name of this app
-  "SinoTool"
-);
+firebase.initializeApp(firebaseConfig)
 
 export default firebase;
