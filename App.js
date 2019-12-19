@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Image } from "react-native";
-import { Header } from "./Header";
-import { Events } from "./Events";
+import { Header } from "./components/Header";
+import { Events } from "./components/Events";
+import { StoryEvents } from "./StoryEvents"
 import firebase from "./firebase";
 import { AppLoading, SplashScreen } from "expo";
 import { Asset } from "expo-asset";
@@ -59,12 +60,7 @@ export default class App extends Component {
     return (
       <View style={styles.container}>
         <Header />
-        <SafeAreaView style={styles.content_block}>
-          <Text style={styles.title_bold}>開催中のイベント</Text>
-          <View style={styles.base_box}>
-            <Events events={this.state.events} />
-          </View>
-        </SafeAreaView>
+        <StoryEvents events={this.state.events} />
         <SafeAreaView style={styles.content_block}>
           <Text style={styles.title_bold}>討伐イベント</Text>
           <View style={styles.base_box}>

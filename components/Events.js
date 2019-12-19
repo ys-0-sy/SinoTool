@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
-import { Timer } from "./components/Timer";
-import firebase from "./firebase";
+import { Timer } from "./Timer";
+import firebase from "../firebase";
 
 export class Events extends Component {
   constructor(props) {
@@ -16,13 +16,12 @@ export class Events extends Component {
     return (
       <View>
         {this.props.events.map(event => {
-          console.log(this.isUndefined(event.imgUrl))
           if (this.isUndefined(event) || this.isUndefined(event.imgUrl)) {
             return (
               <View style={styles.container}>
                 <Image
                   style={styles.image}
-                  source={require("./assets/event1.png")}
+                  source={require("../assets/event1.png")}
                 />
                 <Timer />
               </View>
@@ -33,7 +32,7 @@ export class Events extends Component {
                 <Image
                   style={styles.image}
                   source={{ uri: event.imgUrl }}
-                  loadingIndicatorSource={require("./assets/event1.png")}
+                  loadingIndicatorSource={require("../assets/event1.png")}
                 />
                 <Timer endDate={event.endDate} />
               </View>
