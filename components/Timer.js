@@ -10,17 +10,22 @@ export class Timer extends Component {
     };
   }
 
+  zeroPadding = num => {
+    return ('00' + num).slice(-2)
+  }
+
   diffCurrentTime = targetDate => {
     if (this.isUndefined(targetDate)) {
       return "-日 --:--"
     } else {
       const diffTime = moment(targetDate).diff(moment(), 'days', true)
+      const secondDiff = hourDiff * 60
       const day = Math.floor(diffTime);
-      const hour = Math.floor((diffTime - day) * 60);
-      const minute = Math.floor(((diffTime - day) * 60 - hour) * 60);
-      const second = diffTime;
-      //console.log((diffTime - day) * 60 - hour)
-      return `${day}日 ${hour}:${minute}`;
+      const dayDiff = (diffTime - day) * 60
+      const hour = Math.floor(dayDiff);
+      const hourDiff = (dayDiff - hour) * 60
+      const minute = Math.floor(hourDiff);
+      return `${day}日 ${this.zeroPadding(hour)}:${this.zeroPadding(minute)}`;
     }
 
   };

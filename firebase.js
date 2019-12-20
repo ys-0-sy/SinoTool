@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import firebase from "firebase";
 
 const firebaseConfig = {
@@ -11,7 +12,6 @@ const firebaseConfig = {
   measurementId: "G-XNNMMNP599"
 };
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig)
 
 export default firebase;
