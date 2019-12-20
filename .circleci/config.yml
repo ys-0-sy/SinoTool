@@ -39,12 +39,24 @@ jobs:
       - run:
           name: 依存関係をインストール
           command: yarn install --frozen-lockfile
-      - run:
-          name: react-nativeへ変換
-          command: yarn expo eject --eject-method bare --non-interactive
       - save_yarn
+
+  publish:
+    executor:
+      name: default
+    steps:
+      - checkout
+      - run:
+          name: publish
+          command: ./node_modules/expo/bin/expo.js publish
 
 workflows:
   android-ios:
     jobs:
       - setup
+      - publish:
+          requires:
+            - setup
+          filters:
+            branches:
+              only: master
