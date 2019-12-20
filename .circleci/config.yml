@@ -27,8 +27,8 @@ commands:
           name: Yarn パッケージキャッシュを保存
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
-            - ~/.cache/yarn
             - ~/project/node_modules
+            - ~/.cache/yarn
 
 jobs:
   setup:
