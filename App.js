@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, SafeAreaView, Image } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, Image, ScrollView } from "react-native";
 import { Header } from "./components/Header";
-import { Events } from "./components/Events";
 import { StoryEvents } from "./StoryEvents"
+import { GuerrillaEvents } from "./GuerrillaEvents"
 import firebase from "./firebase";
 import { AppLoading, SplashScreen } from "expo";
 import { Asset } from "expo-asset";
@@ -14,7 +14,8 @@ export default class App extends Component {
     this.state = {
       events: new Array(),
       isSplashReady: false,
-      isAppReady: false
+      isAppReady: false,
+      scrollAreaHeight: Number
     };
   }
 
@@ -37,6 +38,9 @@ export default class App extends Component {
   }
 
   render() {
+    const storyEvents = this.state.events
+    const guerrillaEvents = this.state.events
+
     if (!this.state.isSplashReady) {
       return (
         <AppLoading
@@ -60,12 +64,13 @@ export default class App extends Component {
     return (
       <View style={styles.container}>
         <Header />
-        <StoryEvents events={this.state.events} />
-        <SafeAreaView style={styles.content_block}>
-          <Text style={styles.title_bold}>討伐イベント</Text>
-          <View style={styles.base_box}>
-            <Events events={this.state.events} />
-          </View>
+        <SafeAreaView>
+          <ScrollView
+            contentContainerStyle={{ paddingVertical: 20 }}
+          >
+            <StoryEvents events={storyEvents} />
+            <GuerrillaEvents events={guerrillaEvents} />
+          </ScrollView>
         </SafeAreaView>
       </View>
     );
@@ -105,10 +110,10 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    flexGrow: 1,
     backgroundColor: "#fff"
   },
   content_block: {
-    height: 300,
     margin: 10,
     marginTop: 30,
     marginBottom: 0

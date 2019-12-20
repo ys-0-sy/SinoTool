@@ -14,12 +14,12 @@ export class Header extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#801E00",
-    height: 100
   },
   title: {
     color: "#FFFFFF",
     textAlign: "center",
-    marginTop: 55,
+    marginTop: 45,
+    paddingBottom: 10,
     fontSize: 25,
     fontWeight: "bold",
     fontFamily: "Didot"
