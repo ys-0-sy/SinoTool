@@ -50,7 +50,7 @@ jobs:
       - restore_yarn
       - run:
           name: publish
-          command: ./node_modules/expo/bin/expo.js publish
+          command: ~/project/node_modules/expo/bin/expo.js publish
 
 workflows:
   android-ios:
