@@ -53,7 +53,7 @@ jobs:
           command: ~/project/node_modules/expo-cli/bin/expo.js login -u $username -p $password
       - run:
           name: publish
-          command: ~/project/node_modules/expo-cli/bin/expo.js publish --release-channel release
+          command: ~/project/node_modules/expo-cli/bin/expo.js publish
 
   beta_publish:
     executor:
