@@ -27,6 +27,7 @@ commands:
           name: Yarn パッケージキャッシュを保存
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
+            - ~/project/node_modules
             - ~/.cache/yarn
 
 jobs:
@@ -41,20 +42,43 @@ jobs:
           command: yarn install --frozen-lockfile
       - save_yarn
 
-  publish:
+  release_publish:
     executor:
       name: default
     steps:
       - checkout
+      - restore_yarn
+      - run:
+          name: login
+          command: ~/project/node_modules/expo-cli/bin/expo.js login -u $username -p $password
       - run:
           name: publish
-          command: ./node_modules/expo/bin/expo.js publish
+          command: ~/project/node_modules/expo-cli/bin/expo.js publish --release-channel release
+
+  beta_publish:
+    executor:
+      name: default
+    steps:
+      - checkout
+      - restore_yarn
+      - run:
+          name: login
+          command: ~/project/node_modules/expo-cli/bin/expo.js login -u $username -p $password
+      - run:
+          name: publish
+          command: ~/project/node_modules/expo-cli/bin/expo.js publish --release-channel beta
 
 workflows:
   android-ios:
     jobs:
       - setup
-      - publish:
+      - beta_publish:
+          requires:
+            - setup
+          filters:
+            branches:
+              only: staging
+      - release_publish:
           requires:
             - setup
           filters:
