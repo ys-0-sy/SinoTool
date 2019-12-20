@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   content_block: {
     margin: 10,
     marginTop: 30,
-    marginBottom: 0
+    paddingBottom: 1000,
   },
   title_bold: {
     fontSize: 25,

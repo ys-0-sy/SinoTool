@@ -65,9 +65,7 @@ export default class App extends Component {
       <View style={styles.container}>
         <Header />
         <SafeAreaView>
-          <ScrollView
-            contentContainerStyle={{ paddingVertical: 20 }}
-          >
+          <ScrollView>
             <StoryEvents events={storyEvents} />
             <GuerrillaEvents events={guerrillaEvents} />
           </ScrollView>
