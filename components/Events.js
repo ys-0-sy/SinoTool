@@ -1,44 +1,52 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Text, Image } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  TouchableHighlightBase
+} from "react-native";
 import { Timer } from "./Timer";
 import firebase from "../firebase";
 
 export class Events extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isReadytoFetchData: false
+    };
   }
 
   isUndefined = valiable => {
     return typeof valiable === "undefined";
   };
 
+  componentWillUpdate() {
+    if (
+      !this.isUndefined(this.props.event) ||
+      !this.isUndefined(this.props.event.imgUrl)
+    ) {
+      this.setState({ isReadytoFetchData: true });
+    }
+  }
+
   render() {
+    const isReadytoFetchData = this.state.isReadytoFetchData;
+    const event = this.props.event;
+    let image;
+    if (isReadytoFetchData) {
+      image = <Image style={styles.image} source={{ uri: event.imgUrl }} />;
+    } else {
+      image = (
+        <Image style={styles.image} source={require("../assets/event1.png")} />
+      );
+    }
+
     return (
-      <View>
-        {this.props.events.map(event => {
-          if (this.isUndefined(event) || this.isUndefined(event.imgUrl)) {
-            return (
-              <View style={styles.container}>
-                <Image
-                  style={styles.image}
-                  source={require("../assets/event1.png")}
-                />
-                <Timer />
-              </View>
-            );
-          } else {
-            return (
-              <View style={styles.container}>
-                <Image
-                  style={styles.image}
-                  source={{ uri: event.imgUrl }}
-                  loadingIndicatorSource={require("../assets/event1.png")}
-                />
-                <Timer endDate={event.endDate} />
-              </View>
-            );
-          }
-        })}
+      <View style={styles.container}>
+        <Text>event</Text>
+        {image}
+        <Timer endDate={event.endDate} />
       </View>
     );
   }

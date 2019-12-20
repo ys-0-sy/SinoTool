@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Events } from "./components/Events";
 
-export class StoryEvents extends Component {
+export class ConstantEvents extends Component {
   constructor(props) {
     super(props);
   }
@@ -12,11 +12,17 @@ export class StoryEvents extends Component {
       <View style={styles.content_block}>
         <Text style={styles.title_bold}>開催中のイベント</Text>
         <View style={styles.base_box}>
-          <Events events={this.props.events} />
-        </View >
+          {this.props.events.map(event => {
+            console.log(event.endDate <= Date.now());
+            if (event.endDate <= Date.now()) {
+              <Events event={event} />;
+            } else {
+              <Text>event</Text>;
+            }
+          })}
+        </View>
       </View>
-
-    )
+    );
   }
 }
 
