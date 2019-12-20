@@ -28,6 +28,7 @@ commands:
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
+            - ~/project/node_modules
 
 jobs:
   setup:
