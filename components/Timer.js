@@ -10,6 +10,10 @@ export class Timer extends Component {
     };
   }
 
+  zeroPadding = num => {
+    return ('00' + num).slice(-2)
+  }
+
   diffCurrentTime = targetDate => {
     if (this.isUndefined(targetDate)) {
       return "-日 --:--"
@@ -21,7 +25,7 @@ export class Timer extends Component {
       const hour = Math.floor(dayDiff);
       const hourDiff = (dayDiff - hour) * 60
       const minute = Math.floor(hourDiff);
-      return `${day}日 ${hour}:${minute}`;
+      return `${day}日 ${this.zeroPadding(hour)}:${this.zeroPadding(minute)}`;
     }
 
   };
