@@ -24,7 +24,7 @@ export default class App extends Component {
       if (typeof event.imgUrl === "undefined") {
         const storageRef = firebase.storage().ref();
         return storageRef
-          .child(event.imgPath)
+          .child(event.image)
           .getDownloadURL()
           .then(url => {
             const newStateEvents = this.state.events
@@ -38,8 +38,9 @@ export default class App extends Component {
   }
 
   render() {
-    const storyEvents = this.state.events
-    const guerrillaEvents = this.state.events
+    const storyEvents = this.state.events.filter(event => !event.guerrilla)
+    const guerrillaEvents = this.state.events.filter(event => event.guerrilla)
+
 
     if (!this.state.isSplashReady) {
       return (
@@ -87,13 +88,10 @@ export default class App extends Component {
         .get()
         .then(snapshot => {
           snapshot.forEach(event => {
-            const imgPath = event.data().image;
+            const newEvent = event.data()
+            newEvent.endDate = new Date(event.data().endDate.seconds * 1000)
             this.setState({
-              events: this.state.events.concat({
-                name: event.data().name,
-                endDate: new Date(event.data().endDate.seconds * 1000),
-                imgPath: event.data().image
-              })
+              events: this.state.events.concat(newEvent)
             });
           });
         })
