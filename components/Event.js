@@ -7,35 +7,28 @@ import {
   TouchableHighlightBase
 } from "react-native";
 import { Timer } from "./Timer";
-import firebase from "../firebase";
 
-export class Events extends Component {
+export class Event extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isReadytoFetchData: false
-    };
   }
 
   isUndefined = valiable => {
     return typeof valiable === "undefined";
   };
 
-  componentWillUpdate() {
-    if (
-      !this.isUndefined(this.props.event) ||
-      !this.isUndefined(this.props.event.imgUrl)
-    ) {
-      this.setState({ isReadytoFetchData: true });
-    }
-  }
-
   render() {
-    const isReadytoFetchData = this.state.isReadytoFetchData;
     const event = this.props.event;
     let image;
-    if (isReadytoFetchData) {
-      image = <Image style={styles.image} source={{ uri: event.imgUrl }} />;
+    console.log(this.isUndefined(event.imgUrl));
+    if (!this.isUndefined(event.imgUrl)) {
+      image = (
+        <Image
+          style={styles.image}
+          source={{ uri: event.imgUrl }}
+          loadingIndicatorSource={require("../assets/event1.png")}
+        />
+      );
     } else {
       image = (
         <Image style={styles.image} source={require("../assets/event1.png")} />
@@ -44,9 +37,8 @@ export class Events extends Component {
 
     return (
       <View style={styles.container}>
-        <Text>event</Text>
         {image}
-        <Timer endDate={event.endDate} />
+        <Timer endDate={this.props.event.endDate} />
       </View>
     );
   }

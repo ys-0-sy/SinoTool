@@ -45,7 +45,7 @@ export default class App extends Component {
   }
 
   render() {
-    const storyEvents = this.state.events.filter(event => !event.guerrilla);
+    const constantEvents = this.state.events.filter(event => !event.guerrilla);
     const guerrillaEvents = this.state.events.filter(event => event.guerrilla);
 
     if (!this.state.isSplashReady) {
@@ -73,7 +73,7 @@ export default class App extends Component {
         <Header />
         <SafeAreaView>
           <ScrollView>
-            <ConstantEvents events={storyEvents} />
+            <ConstantEvents events={constantEvents} />
             <GuerrillaEvents events={guerrillaEvents} />
           </ScrollView>
         </SafeAreaView>

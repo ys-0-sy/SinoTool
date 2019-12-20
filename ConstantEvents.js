@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Events } from "./components/Events";
+import { Event } from "./components/Event";
 
 export class ConstantEvents extends Component {
   constructor(props) {
@@ -13,11 +13,8 @@ export class ConstantEvents extends Component {
         <Text style={styles.title_bold}>開催中のイベント</Text>
         <View style={styles.base_box}>
           {this.props.events.map(event => {
-            console.log(event.endDate <= Date.now());
-            if (event.endDate <= Date.now()) {
-              <Events event={event} />;
-            } else {
-              <Text>event</Text>;
+            if (event.endDate >= Date.now()) {
+              return <Event event={event} />;
             }
           })}
         </View>
@@ -30,7 +27,7 @@ const styles = StyleSheet.create({
   content_block: {
     margin: 10,
     marginTop: 30,
-    marginBottom: 0,
+    marginBottom: 0
   },
   title_bold: {
     fontSize: 25,
