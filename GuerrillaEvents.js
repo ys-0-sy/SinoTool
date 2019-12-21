@@ -5,6 +5,9 @@ import { Event } from "./components/Event";
 export class GuerrillaEvents extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      guerrillaTime: ["1:30", "2:30", "8:30", "12:00", "17:30", "20:30", "23:30"]
+    }
   }
 
   render() {
@@ -17,6 +20,15 @@ export class GuerrillaEvents extends Component {
               return <Event event={event} />;
             }
           })}
+          <View style={styles.base_box, { flexDirection: 'row' }}>
+            {this.state.guerrillaTime.map(time => {
+              return (
+                <Text style={styles.text_small_bold}>
+                  {time}
+                </Text>
+              )
+            })}
+          </View>
         </View>
       </View>
     );
@@ -27,7 +39,14 @@ const styles = StyleSheet.create({
   content_block: {
     margin: 10,
     marginTop: 30,
-    paddingBottom: 1000
+    paddingBottom: 10
+  },
+  text_small_bold: {
+    flex: 1,
+    fontSize: 13,
+    color: "#140505",
+    fontWeight: "bold",
+    fontFamily: "Didot",
   },
   title_bold: {
     fontSize: 25,

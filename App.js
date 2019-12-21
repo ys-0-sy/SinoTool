@@ -11,9 +11,10 @@ import { Header } from "./components/Header";
 import { ConstantEvents } from "./ConstantEvents";
 import { GuerrillaEvents } from "./GuerrillaEvents";
 import firebase from "./firebase";
-import { AppLoading, SplashScreen } from "expo";
+import { AppLoading, SplashScreen, Constants, Notifications } from "expo";
 import { Asset } from "expo-asset";
 import firestore from "@firebase/firestore";
+import * as Permissions from 'expo-permissions'
 
 export default class App extends Component {
   constructor(props) {
@@ -22,7 +23,8 @@ export default class App extends Component {
       events: new Array(),
       isSplashReady: false,
       isAppReady: false,
-      scrollAreaHeight: Number
+      scrollAreaHeight: Number,
+      isNotificationPermitted: false,
     };
   }
 
@@ -42,6 +44,13 @@ export default class App extends Component {
           });
       }
     });
+  }
+
+  async componentDidMount() {
+    let result = await Permissions.askAsync(Permissions.NOTIFICATIONS)
+    if (Constants.isDevice && result.status === 'granted') {
+      console.log('Notification permissions granted.')
+    }
   }
 
   render() {
@@ -73,8 +82,11 @@ export default class App extends Component {
         <Header />
         <SafeAreaView>
           <ScrollView>
-            <ConstantEvents events={constantEvents} />
-            <GuerrillaEvents events={guerrillaEvents} />
+            <SafeAreaView style={{ marginBottom: 100 }}>
+              <ConstantEvents events={constantEvents} />
+              <GuerrillaEvents events={guerrillaEvents} />
+              <Text>Notification Permission: {this.state.isNotificationPermitted ? '○' : '×'}</Text>
+            </SafeAreaView>
           </ScrollView>
         </SafeAreaView>
       </View>
