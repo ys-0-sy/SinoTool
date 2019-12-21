@@ -20,7 +20,6 @@ export class Event extends Component {
   render() {
     const event = this.props.event;
     let image;
-    console.log(this.isUndefined(event.imgUrl));
     if (!this.isUndefined(event.imgUrl)) {
       image = (
         <Image
