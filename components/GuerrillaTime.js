@@ -37,9 +37,7 @@ export class GuerrillaTime extends Component {
       <View style={{ flexDirection: "row" }}>
         <View style={{ flex: 5 }}>
           <View style={[styles.base_box]}>
-            <View
-              style={[{ flexDirection: "row", width: 280, borderWidth: 0 }]}
-            >
+            <View style={[{ flexDirection: "row", borderWidth: 0 }]}>
               {this.state.guerrillaTime.map((time, index) => {
                 if (index <= 3) {
                   return (
@@ -61,9 +59,7 @@ export class GuerrillaTime extends Component {
               })}
             </View>
 
-            <View
-              style={[{ flexDirection: "row", width: 210, borderWidth: 0 }]}
-            >
+            <View style={[{ flexDirection: "row", borderWidth: 0 }]}>
               {this.state.guerrillaTime.map((time, index) => {
                 if (index > 3) {
                   return (
@@ -91,9 +87,7 @@ export class GuerrillaTime extends Component {
               {
                 flexDirection: "row",
                 alignContent: "center",
-                width: 200,
                 margin: 5,
-                marginLeft: 40,
                 borderRadius: 30
               }
             ]}
