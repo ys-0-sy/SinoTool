@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, StyleSheet, Text } from "react-native";
-import moment from 'moment';
+import moment from "moment";
 
 export class Timer extends Component {
   constructor(props) {
@@ -11,32 +11,30 @@ export class Timer extends Component {
   }
 
   zeroPadding = num => {
-    return ('00' + num).slice(-2)
-  }
+    return ("00" + num).slice(-2);
+  };
 
   diffCurrentTime = targetDate => {
     if (this.isUndefined(targetDate)) {
-      return "-日 --:--"
+      return "-日 --:--";
     } else {
-      const diffTime = moment(targetDate).diff(moment(), 'days', true)
-      const secondDiff = hourDiff * 60
+      const diffTime = moment(targetDate).diff(moment(), "days", true);
+      const secondDiff = hourDiff * 60;
       const day = Math.floor(diffTime);
-      const dayDiff = (diffTime - day) * 60
+      const dayDiff = (diffTime - day) * 60;
       const hour = Math.floor(dayDiff);
-      const hourDiff = (dayDiff - hour) * 60
+      const hourDiff = (dayDiff - hour) * 60;
       const minute = Math.floor(hourDiff);
       return `${day}日 ${this.zeroPadding(hour)}:${this.zeroPadding(minute)}`;
     }
-
   };
 
   isUndefined = valiable => {
-    return (typeof valiable === 'undefined')
-  }
+    return typeof valiable === "undefined";
+  };
 
   componentDidMount() {
     setInterval(() => {
-      //console.log(this.props.endDate)
       this.setState({
         date: this.diffCurrentTime(this.props.endDate)
       });

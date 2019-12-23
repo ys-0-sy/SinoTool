@@ -11,10 +11,11 @@ import { Header } from "./components/Header";
 import { ConstantEvents } from "./ConstantEvents";
 import { GuerrillaEvents } from "./GuerrillaEvents";
 import firebase from "./firebase";
-import { AppLoading, SplashScreen, Constants, Notifications } from "expo";
+import { AppLoading, SplashScreen, Notifications } from "expo";
 import { Asset } from "expo-asset";
 import firestore from "@firebase/firestore";
-import * as Permissions from 'expo-permissions'
+import * as Permissions from "expo-permissions";
+import Constants from "expo-constants";
 
 export default class App extends Component {
   constructor(props) {
@@ -24,7 +25,7 @@ export default class App extends Component {
       isSplashReady: false,
       isAppReady: false,
       scrollAreaHeight: Number,
-      isNotificationPermitted: false,
+      isNotificationPermitted: false
     };
   }
 
@@ -47,9 +48,9 @@ export default class App extends Component {
   }
 
   async componentDidMount() {
-    let result = await Permissions.askAsync(Permissions.NOTIFICATIONS)
-    if (Constants.isDevice && result.status === 'granted') {
-      console.log('Notification permissions granted.')
+    let result = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    if (Constants.isDevice && result.status === "granted") {
+      console.log("Notification permissions granted.");
     }
   }
 
@@ -61,7 +62,11 @@ export default class App extends Component {
       return (
         <AppLoading
           startAsync={this._cacheSplashResourcesAsync}
-          onFinish={() => this.setState({ isSplashReady: true })}
+          onFinish={() =>
+            this.setState({
+              isSplashReady: true
+            })
+          }
           onError={console.warn}
           autoHideSplash={false}
         />
@@ -69,7 +74,11 @@ export default class App extends Component {
     }
     if (!this.state.isAppReady) {
       return (
-        <View style={{ flex: 1 }}>
+        <View
+          style={{
+            flex: 1
+          }}
+        >
           <Image
             source={require("./assets/images/splash.gif")}
             onLoad={this._cacheResourcesAsync}
@@ -82,10 +91,17 @@ export default class App extends Component {
         <Header />
         <SafeAreaView>
           <ScrollView>
-            <SafeAreaView style={{ marginBottom: 100 }}>
+            <SafeAreaView
+              style={{
+                marginBottom: 100
+              }}
+            >
               <ConstantEvents events={constantEvents} />
               <GuerrillaEvents events={guerrillaEvents} />
-              <Text>Notification Permission: {this.state.isNotificationPermitted ? '○' : '×'}</Text>
+              <Text>
+                Notification Permission:
+                {this.state.isNotificationPermitted ? "○" : "×"}
+              </Text>
             </SafeAreaView>
           </ScrollView>
         </SafeAreaView>
@@ -118,7 +134,9 @@ export default class App extends Component {
         });
     };
     await Promise.all(fetchDb());
-    this.setState({ isAppReady: true });
+    this.setState({
+      isAppReady: true
+    });
   };
 }
 

@@ -14,7 +14,7 @@ export class ConstantEvents extends Component {
         <View style={styles.base_box}>
           {this.props.events.map(event => {
             if (event.endDate >= Date.now()) {
-              return <Event event={event} />;
+              return <Event key={event} event={event} />;
             }
           })}
         </View>
