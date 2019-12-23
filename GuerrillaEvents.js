@@ -1,13 +1,11 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Event } from "./components/Event";
+import { GuerrillaTime } from "./components/GuerrillaTime";
 
 export class GuerrillaEvents extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      guerrillaTime: ["1:30", "2:30", "8:30", "12:00", "17:30", "20:30", "23:30"]
-    }
   }
 
   render() {
@@ -17,18 +15,10 @@ export class GuerrillaEvents extends Component {
         <View style={styles.base_box}>
           {this.props.events.map(event => {
             if (event.endDate >= Date.now()) {
-              return <Event event={event} />;
+              return <Event key={event} event={event} />;
             }
           })}
-          <View style={styles.base_box, { flexDirection: 'row' }}>
-            {this.state.guerrillaTime.map(time => {
-              return (
-                <Text style={styles.text_small_bold}>
-                  {time}
-                </Text>
-              )
-            })}
-          </View>
+          <GuerrillaTime />
         </View>
       </View>
     );
@@ -42,11 +32,12 @@ const styles = StyleSheet.create({
     paddingBottom: 10
   },
   text_small_bold: {
-    flex: 1,
-    fontSize: 13,
+    width: 75,
+    fontSize: 15,
     color: "#140505",
     fontWeight: "bold",
     fontFamily: "Didot",
+    textAlign: "center"
   },
   title_bold: {
     fontSize: 25,
@@ -54,6 +45,7 @@ const styles = StyleSheet.create({
     fontFamily: "Didot"
   },
   base_box: {
+    flex: 1,
     borderWidth: 1,
     borderRadius: 3,
     borderColor: "#707070",
