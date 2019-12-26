@@ -14,7 +14,7 @@ export class GuerrillaEvents extends Component {
         <Text style={styles.title_bold}>討伐イベント</Text>
         <View style={styles.base_box}>
           {this.props.events.map(event => {
-            if (event.endDate >= Date.now()) {
+            if (event.endDate <= Date.now()) {
               return <Event key={event} event={event} />;
             }
           })}

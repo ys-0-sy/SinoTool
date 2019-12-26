@@ -15,12 +15,33 @@ export class GuerrillaTime extends Component {
         "20:30",
         "23:30"
       ],
-      date: "--:--"
+      date: "--:--",
+      nextDate: moment()
     };
   }
+  diffCurrentTime = targetDate => {
+    if (this.isUndefined(targetDate)) {
+      return "-日 --:--";
+    } else {
+      const diffTime = moment(targetDate).diff(moment(), "days", true);
+      const secondDiff = hourDiff * 60;
+      const day = Math.floor(diffTime);
+      const dayDiff = (diffTime - day) * 60;
+      const hour = Math.floor(dayDiff);
+      const hourDiff = (dayDiff - hour) * 60;
+      const minute = Math.floor(hourDiff);
+      return `${day}日 ${this.zeroPadding(hour)}:${this.zeroPadding(minute)}`;
+    }
+  };
 
   isFuture = time => {
+    //console.log(moment(moment().format("YYYY-MM-DD ") + time).diff(moment()));
     return 0 <= moment(moment().format("YYYY-MM-DD ") + time).diff(moment());
+  };
+
+  isNext = () => {
+    this.state.guerrillaTime;
+    console.log(moment(moment().format("YYYY-MM-DD ") + time).diff(moment()));
   };
 
   isNow = time => {
@@ -31,6 +52,8 @@ export class GuerrillaTime extends Component {
       )
     );
   };
+
+  componentDidMount() {}
 
   render() {
     return (
@@ -87,12 +110,21 @@ export class GuerrillaTime extends Component {
               {
                 flexDirection: "row",
                 alignContent: "center",
+                alignSelf: "center",
+                alignItems: "center",
                 margin: 5,
+                marginRight: 30,
+                marginLeft: 30,
                 borderRadius: 30
               }
             ]}
           >
-            <Text style={[styles.text_small_bold, { flex: 1 }]}>
+            <Text
+              style={[
+                styles.text_small_bold,
+                { flex: 1, textAlign: "center", marginTop: 8 }
+              ]}
+            >
               次回開始まで
             </Text>
             <Text style={[styles.text_small_bold, { flex: 1 }]}>

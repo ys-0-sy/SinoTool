@@ -19,9 +19,8 @@ export class Timer extends Component {
       return "-日 --:--";
     } else {
       const diffTime = moment(targetDate).diff(moment(), "days", true);
-      const secondDiff = hourDiff * 60;
       const day = Math.floor(diffTime);
-      const dayDiff = (diffTime - day) * 60;
+      const dayDiff = (diffTime - day) * 24;
       const hour = Math.floor(dayDiff);
       const hourDiff = (dayDiff - hour) * 60;
       const minute = Math.floor(hourDiff);
