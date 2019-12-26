@@ -1,26 +1,12 @@
-// redux.js
-import { combineReducers, createStore } from "redux";
-
-// actions.js
-
-export const setEvent = event => ({
-  type: "SET_EVENT",
-  event: event
-});
-
-export const setEventImgUrl = (index, imgUrl) => ({
-  type: "SET_EVENT_IMGURL",
-  index: index,
-  imgUrl: imgUrl
-});
-
+import { setEvent, setEventImgUrl } from "./actions";
+import { combineReducers } from "redux";
+// reducers.js
 INITIAL_STATE = {
   eventsAll: new Array(),
   guerrillaEvents: new Array(),
   constantEvents: new Array()
 };
 
-// reducers.js
 const reducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case "SET_EVENT":
@@ -55,6 +41,3 @@ const reducer = (state = INITIAL_STATE, action) => {
 export const reducers = combineReducers({
   events: reducer
 });
-
-// store.js
-export const store = createStore(reducers);

@@ -10,16 +10,14 @@ import {
 import { Header } from "./components/Header";
 import { ConstantEvents } from "./ConstantEvents";
 import { GuerrillaEvents } from "./GuerrillaEvents";
-import firebase from "./firebase";
 import { AppLoading, SplashScreen, Notifications } from "expo";
 import { Asset } from "expo-asset";
-import firestore from "@firebase/firestore";
 import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
 
 import { connect } from "react-redux";
-import { setEvent, setEventImgUrl } from "./src/containers/redux";
-import { store } from "./src/containers/redux";
+import { setEvent, setEventImgUrl } from "./src/containers/actions";
+import { store } from "./src/containers/store";
 
 export class Home extends Component {
   constructor(props) {
@@ -117,22 +115,6 @@ export class Home extends Component {
 
   _cacheResourcesAsync = async () => {
     SplashScreen.hide();
-    const db = firebase.firestore();
-    const fetchDb = async () => {
-      db.collection("events")
-        .get()
-        .then(snapshot => {
-          snapshot.forEach(event => {
-            const newEvent = event.data();
-            newEvent.endDate = new Date(event.data().endDate.seconds * 1000);
-            this.props.setEvent(newEvent);
-          });
-        })
-        .catch(err => {
-          console.log("Error getting documents", err);
-        });
-    };
-    await Promise.all(fetchDb());
     this.setState({
       isAppReady: true
     });
