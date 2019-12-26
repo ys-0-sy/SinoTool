@@ -28,6 +28,7 @@ export class Home extends Component {
       scrollAreaHeight: Number,
       isNotificationPermitted: false
     };
+    props.dispatch({ type: "FETCH_EVENTS" });
   }
 
   componentDidUpdate() {

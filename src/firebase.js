@@ -22,6 +22,7 @@ fetchDb = collection => {
     .collection(collection)
     .get()
     .then(snapshot => {
+      console.log("get snapshot");
       return { snapshot };
     })
     .catch(err => {
