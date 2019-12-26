@@ -5,13 +5,9 @@ import { Event } from "./components/Event";
 export class ConstantEvents extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      hasData: false
-    };
   }
 
   render() {
-    console.log(this.props);
     return (
       <View style={styles.content_block}>
         <Text style={styles.title_bold}>開催中のイベント</Text>
