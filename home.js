@@ -18,14 +18,13 @@ import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
 
 import { connect } from "react-redux";
-import { fetchEvents } from "./src/containers/redux";
+import { setEvent, setEventImgUrl } from "./src/containers/redux";
 import { store } from "./src/containers/redux";
 
 export class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      events: new Array(),
       isSplashReady: false,
       isAppReady: false,
       scrollAreaHeight: Number,
@@ -34,21 +33,19 @@ export class Home extends Component {
   }
 
   componentDidUpdate() {
-    this.state.events.forEach((event, index) => {
-      if (typeof event.imgUrl === "undefined") {
-        const storageRef = firebase.storage().ref();
-        return storageRef
-          .child(event.image)
-          .getDownloadURL()
-          .then(url => {
-            const newStateEvents = this.state.events;
-            newStateEvents[index].imgUrl = url;
-            this.setState({
-              events: newStateEvents
+    if (this.props.eventsAll.length !== 0) {
+      this.props.eventsAll.forEach((event, index) => {
+        if (typeof event.imgUrl === "undefined") {
+          const storageRef = firebase.storage().ref();
+          return storageRef
+            .child(event.image)
+            .getDownloadURL()
+            .then(url => {
+              this.props.setEventImgUrl(index, url);
             });
-          });
-      }
-    });
+        }
+      });
+    }
   }
 
   async componentDidMount() {
@@ -59,8 +56,8 @@ export class Home extends Component {
   }
 
   render() {
-    const constantEvents = this.state.events.filter(event => !event.guerrilla);
-    const guerrillaEvents = this.state.events.filter(event => event.guerrilla);
+    const constantEvents = this.props.constantEvents;
+    const guerrillaEvents = this.props.guerrillaEvents;
 
     if (!this.state.isSplashReady) {
       return (
@@ -128,7 +125,7 @@ export class Home extends Component {
           snapshot.forEach(event => {
             const newEvent = event.data();
             newEvent.endDate = new Date(event.data().endDate.seconds * 1000);
-            this.props.fetchEvents(newEvent);
+            this.props.setEvent(newEvent);
           });
         })
         .catch(err => {
@@ -166,11 +163,14 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  events: state.events
+  eventsAll: state.events.eventsAll,
+  constantEvents: state.events.constantEvents,
+  guerrillaEvents: state.events.guerrillaEvents
 });
 
 const mapDispachToProps = {
-  fetchEvents
+  setEvent,
+  setEventImgUrl
 };
 
 export default connect(mapStateToProps, mapDispachToProps)(Home);
