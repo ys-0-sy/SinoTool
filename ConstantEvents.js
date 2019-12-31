@@ -13,8 +13,8 @@ export class ConstantEvents extends Component {
         <Text style={styles.title_bold}>開催中のイベント</Text>
         <View style={styles.base_box}>
           {this.props.events.map(event => {
-            if (event.endDate >= Date.now()) {
-              return <Event event={event} />;
+            if (event.endDate <= Date.now()) {
+              return <Event key={event} event={event} />;
             }
           })}
         </View>
