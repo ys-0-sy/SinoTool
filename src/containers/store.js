@@ -2,8 +2,17 @@
 import { createStore, applyMiddleware } from "redux";
 import createSagaMiddleware from "redux-saga";
 import { reducers } from "./reducers";
-import mySaga from "../firebase";
+import { createLogger } from "redux-logger";
+import rootSaga from "./sagas";
 // store.js
+const logger = createLogger({
+  diff: true,
+  collapsed: true
+});
+
 const sagaMiddleware = createSagaMiddleware();
-export const store = createStore(reducers, applyMiddleware(sagaMiddleware));
-sagaMiddleware.run(mySaga);
+export const store = createStore(
+  reducers,
+  applyMiddleware(sagaMiddleware, logger)
+);
+sagaMiddleware.run(rootSaga);

@@ -1,4 +1,4 @@
-import { put, call, takeEvery } from "redux-saga/effects";
+import { put, call, take } from "redux-saga/effects";
 
 import firebase from "firebase";
 import firestore from "@firebase/firestore";
@@ -23,29 +23,14 @@ fetchDb = collection => {
     .get()
     .then(snapshot => {
       console.log("get snapshot");
-      return { snapshot };
+      snapshot.map(event => {
+        const newEvent = event.data();
+        newEvent.endDate = new Date(event.data().endDate.seconds * 1000);
+        return newEvent;
+      });
     })
     .catch(err => {
       console.log("Error getting documents", err);
       return { err };
     });
 };
-
-function* fetchEvents(action) {
-  const { snapshot, err } = yield call(fetchDb, "events");
-  if (snapshot) {
-    yield* snapshot.forEach(function*(event) {
-      const newEvent = event.data();
-      newEvent.endDate = new Date(event.data().endDate.seconds * 1000);
-      yield put({ type: "SET_EVENT", event: newEvent });
-    });
-  } else {
-    console.log(err);
-  }
-}
-
-function* mySaga() {
-  yield takeEvery("FETCH_EVENTS", fetchEvents);
-}
-
-export default mySaga;

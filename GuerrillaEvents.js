@@ -9,6 +9,7 @@ export class GuerrillaEvents extends Component {
   }
 
   render() {
+    console.log(this.props.events);
     return (
       <View style={styles.content_block}>
         <Text style={styles.title_bold}>討伐イベント</Text>

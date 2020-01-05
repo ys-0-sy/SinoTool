@@ -1,6 +1,17 @@
-import { all } from "redux-saga";
-import mySaga from "../firebase";
+import { fork } from "redux-saga";
+import { fetchDb } from "../firebase";
 
-function* rootSaga() {
-  yield all([...mySaga]);
+function* fetchEvents() {
+  const { snapshot, err } = yield call(fetchDb, "events");
+  if (snapshot) {
+
+      yield put();
+    });
+  } else {
+    console.log(err);
+  }
+}
+
+export default function* rootSaga() {
+  yield fork(fetchEvents);
 }
