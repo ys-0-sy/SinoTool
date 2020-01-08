@@ -5,7 +5,6 @@ import Home from "./home";
 
 export default class App extends Component {
   render() {
-    console.log(store);
     return (
       <Provider store={store}>
         <Home />

@@ -3,7 +3,7 @@ import { createStore, applyMiddleware } from "redux";
 import createSagaMiddleware from "redux-saga";
 import { reducers } from "./reducers";
 import { createLogger } from "redux-logger";
-import rootSaga from "./sagas";
+import mySaga from "./sagas";
 // store.js
 const logger = createLogger({
   diff: true,
@@ -15,4 +15,5 @@ export const store = createStore(
   reducers,
   applyMiddleware(sagaMiddleware, logger)
 );
-sagaMiddleware.run(rootSaga);
+
+sagaMiddleware.run(mySaga);

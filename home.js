@@ -28,23 +28,10 @@ export class Home extends Component {
       scrollAreaHeight: Number,
       isNotificationPermitted: false
     };
+    console.log(props);
   }
 
-  componentDidUpdate() {
-    if (this.props.eventsAll.length !== 0) {
-      this.props.eventsAll.forEach((event, index) => {
-        if (typeof event.imgUrl === "undefined") {
-          const storageRef = firebase.storage().ref();
-          return storageRef
-            .child(event.image)
-            .getDownloadURL()
-            .then(url => {
-              this.props.setEventImgUrl(index, url);
-            });
-        }
-      });
-    }
-  }
+  componentDidUpdate() {}
 
   async componentDidMount() {
     let result = await Permissions.askAsync(Permissions.NOTIFICATIONS);

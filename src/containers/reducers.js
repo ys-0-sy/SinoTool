@@ -13,12 +13,16 @@ const reducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         eventsAll: state.eventsAll.concat(action.event),
-        guerrillaEvents: action.event.guerrilla
-          ? state.guerrillaEvents.concat(action.event)
-          : state.guerrillaEvents,
-        constantEvents: action.event.guerrilla
-          ? state.constantEvents
-          : state.constantEvents.concat(action.event)
+        guerrillaEvents: state.guerrillaEvents.concat(
+          action.event.filter(event => {
+            return event.guerrilla;
+          })
+        ),
+        constantEvents: state.constantEvents.concat(
+          action.event.filter(event => {
+            return !event.guerrilla;
+          })
+        )
       };
     case "SET_EVENT_IMGURL":
       const newEvent = [

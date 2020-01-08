@@ -1,5 +1,3 @@
-import { put, call, take } from "redux-saga/effects";
-
 import firebase from "firebase";
 import firestore from "@firebase/firestore";
 
@@ -16,21 +14,40 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-fetchDb = collection => {
-  firebase
+export const fetchDb = collection => {
+  return firebase
     .firestore()
     .collection(collection)
     .get()
     .then(snapshot => {
       console.log("get snapshot");
-      snapshot.map(event => {
+      let events = [];
+      snapshot.forEach((event, index) => {
         const newEvent = event.data();
         newEvent.endDate = new Date(event.data().endDate.seconds * 1000);
-        return newEvent;
+        events.push(newEvent);
       });
+      return events;
+    })
+    .then(snapshot => {
+      return { snapshot };
     })
     .catch(err => {
-      console.log("Error getting documents", err);
+      console.warn("Error getting documents", err);
+      return { err };
+    });
+};
+
+export const fetchImgUrl = imgPath => {
+  return firebase
+    .storage()
+    .ref()
+    .child(imgPath)
+    .getDownloadURL()
+    .then(url => {
+      return { url };
+    })
+    .catch(err => {
       return { err };
     });
 };
