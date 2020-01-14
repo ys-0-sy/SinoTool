@@ -8,14 +8,14 @@ Array.prototype.gForEach = function*(fn) {
 
 function* fetchEvents() {
   console.log("fetchEvents function");
-  const { snapshot, err } = yield call(fetchDb, "events");
-  console.log("catched db");
+  const { snapshot, err } = yield call(fetchDb, "test-event");
+  console.log("fetched Data from db");
   if (snapshot) {
     yield put(setEvent(snapshot));
   } else {
     console.warn(err);
   }
-
+  console.log(snapshot);
   for (let i = 0; i < snapshot.length; i++) {
     const { url, err } = yield call(fetchImgUrl, snapshot[i].image);
     if (url) {

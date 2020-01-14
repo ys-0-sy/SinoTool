@@ -28,7 +28,6 @@ export class Home extends Component {
       scrollAreaHeight: Number,
       isNotificationPermitted: false
     };
-    console.log(props);
   }
 
   componentDidUpdate() {}

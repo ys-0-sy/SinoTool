@@ -14,7 +14,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-export const fetchDb = collection => {
+export const fetchDb = async collection => {
   return firebase
     .firestore()
     .collection(collection)
