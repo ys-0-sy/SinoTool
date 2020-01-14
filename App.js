@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Provider } from "react-redux";
-import { store } from "./src/containers/redux";
+import { store } from "./src/containers/store";
 import Home from "./home";
 
 export default class App extends Component {

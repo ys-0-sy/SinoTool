@@ -1,38 +1,28 @@
-// redux.js
-import { combineReducers, createStore } from "redux";
-
-// actions.js
-
-export const setEvent = event => ({
-  type: "SET_EVENT",
-  event: event
-});
-
-export const setEventImgUrl = (index, imgUrl) => ({
-  type: "SET_EVENT_IMGURL",
-  index: index,
-  imgUrl: imgUrl
-});
-
+import { setEvent, setEventImgUrl } from "./actions";
+import { combineReducers } from "redux";
+// reducers.js
 INITIAL_STATE = {
   eventsAll: new Array(),
   guerrillaEvents: new Array(),
   constantEvents: new Array()
 };
 
-// reducers.js
 const reducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case "SET_EVENT":
       return {
         ...state,
         eventsAll: state.eventsAll.concat(action.event),
-        guerrillaEvents: action.event.guerrilla
-          ? state.guerrillaEvents.concat(action.event)
-          : state.guerrillaEvents,
-        constantEvents: action.event.guerrilla
-          ? state.constantEvents
-          : state.constantEvents.concat(action.event)
+        guerrillaEvents: state.guerrillaEvents.concat(
+          action.event.filter(event => {
+            return event.guerrilla;
+          })
+        ),
+        constantEvents: state.constantEvents.concat(
+          action.event.filter(event => {
+            return !event.guerrilla;
+          })
+        )
       };
     case "SET_EVENT_IMGURL":
       const newEvent = [
@@ -55,6 +45,3 @@ const reducer = (state = INITIAL_STATE, action) => {
 export const reducers = combineReducers({
   events: reducer
 });
-
-// store.js
-export const store = createStore(reducers);
