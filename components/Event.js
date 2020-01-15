@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import {
   View,
   StyleSheet,
-  Text,
   Image,
+  Text,
   TouchableHighlightBase
 } from "react-native";
 import { Timer } from "./Timer";
+//import { CachedImage } from "react-native-cached-image";
 
 export class Event extends Component {
   constructor(props) {
