@@ -24,8 +24,9 @@ jobs:
         run: |
           yarn
           node_modules/expo-cli/bin/expo.js login -u $USERNAME -p $PASSOWRD
-          node_modules/expo-cli/bin/expo.js publish
+          node_modules/expo-cli/bin/expo.js buld:ios --apple-id ${{ secrets.expo_apple_username}}
         env:
           CI: true
-          USERNAME: ${{ secrets.expo_apple_username}}
+          USERNAME: ${{ secrets.expo_username}}
+          $PASSOWRD: ${{ secrets.expo_password}}
           EXPO_APPLE_PASSWORD: ${{ secrets.expo_apple_password }}
