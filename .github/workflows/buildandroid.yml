@@ -1,4 +1,4 @@
-name: Node CI
+name: build android aab
 
 on:
   push:
@@ -16,17 +16,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
+      - name: Setup kernel for react native, increase watchers
+        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: yarn install build ios android
+      - name: yarn install build ios
         run: |
           yarn
           node_modules/expo-cli/bin/expo.js login -u $USERNAME -p $PASSOWRD
-          node_modules/expo-cli/bin/expo.js buld:ios --apple-id ${{ secrets.expo_apple_username}}
+          node_modules/expo-cli/bin/expo.js buld:android -t app-bundle
         env:
           CI: true
           USERNAME: ${{ secrets.expo_username}}
           $PASSOWRD: ${{ secrets.expo_password}}
-          EXPO_APPLE_PASSWORD: ${{ secrets.expo_apple_password }}
