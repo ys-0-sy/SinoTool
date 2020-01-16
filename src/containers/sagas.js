@@ -8,7 +8,7 @@ Array.prototype.gForEach = function*(fn) {
 
 function* fetchEvents() {
   console.log("fetchEvents function");
-  const { snapshot, err } = yield call(fetchDb, "test-event");
+  const { snapshot, err } = yield call(fetchDb, "events");
   console.log("fetched Data from db");
   if (snapshot) {
     yield put(setEvent(snapshot));

@@ -30,4 +30,4 @@ jobs:
         env:
           CI: true
           USERNAME: ${{ secrets.expo_username}}
-          $PASSOWRD: ${{ secrets.expo_password}}
+          PASSOWRD: ${{ secrets.expo_password}}
