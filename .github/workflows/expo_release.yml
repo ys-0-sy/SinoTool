@@ -1,0 +1,33 @@
+name: Node CI
+
+on:
+  push:
+    branches:
+      - staging
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup kernel for react native, increase watchers
+        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: yarn install and publish to expo
+        run: |
+          yarn
+          node_modules/expo-cli/bin/expo.js login -u ${{ secrets.expo_username }} -p ${{ secrets.expo_password }}
+          node_modules/expo-cli/bin/expo.js publish
+        env:
+          CI: true
+          USERNAME: ${{ secrets.expo_username }}
+          PASSWORD: ${{ secrets.expo_password }}
