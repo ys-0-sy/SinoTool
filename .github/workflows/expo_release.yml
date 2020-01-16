@@ -23,5 +23,5 @@ jobs:
           node_modules/expo-cli/bin/expo.js publish
         env:
           CI: true
-          USERNAME: secrets.expo_username
-          PASSWORD: secrets.expo_password
+          USERNAME: ${{ secrets.expo_username}}
+          PASSWORD: ${{ secrets.expo_password }}
