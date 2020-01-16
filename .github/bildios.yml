@@ -1,6 +1,10 @@
 name: Node CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - staging
+      - master
 
 jobs:
   build:
@@ -16,12 +20,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: yarn install and publish to expo
+      - name: yarn install build ios android
         run: |
           yarn
-          node_modules/expo-cli/bin/expo.js login -u ${{ secrets.expo_username }} -p ${{ secrets.expo_password }}
+          node_modules/expo-cli/bin/expo.js login -u $USERNAME -p $PASSOWRD
           node_modules/expo-cli/bin/expo.js publish
         env:
           CI: true
-          USERNAME: ${{ secrets.expo_username }}
-          PASSWORD: ${{ secrets.expo_password }}
+          USERNAME: ${{ secrets.expo_apple_username}}
+          EXPO_APPLE_PASSWORD: ${{ secrets.expo_apple_password }}
