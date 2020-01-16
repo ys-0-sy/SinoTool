@@ -1,10 +1,6 @@
 name: Node CI
 
-on:
-  push:
-    branches:
-      - master
-      - staging
+on: [push]
 
 jobs:
   build:
@@ -23,8 +19,9 @@ jobs:
       - name: yarn install build ios android
         run: |
           yarn
-          yarn global add expo-cli
-          expo build:ios
-          expo build:android -t app-bundle
+          node_modules/expo-cli/bin/expo.js login -u $USERNAME -p $PASSOWRD
+          node_modules/expo-cli/bin/expo.js publish
         env:
           CI: true
+          USERNAME: secrets.expo_username
+          PASSWORD: secrets.expo_password
