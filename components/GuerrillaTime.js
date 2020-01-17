@@ -13,7 +13,6 @@ export class GuerrillaTime extends Component {
         "08:30",
         "12:00",
         "17:30",
-        "18:05",
         "20:30",
         "23:30"
       ],
@@ -30,6 +29,10 @@ export class GuerrillaTime extends Component {
       }
     });
     return nextTime;
+  };
+
+  zeroPadding = num => {
+    return ("00" + num).slice(-2);
   };
 
   diffCurrentTime = targetDate => {
@@ -65,6 +68,22 @@ export class GuerrillaTime extends Component {
     );
   };
 
+  diffCurrentTime = targetDate => {
+    console.log(targetDate);
+    const diffTime = moment(targetDate).diff(moment(), "days", true);
+    console.log(diffTime);
+    const day = Math.floor(diffTime);
+    const dayDiff = (diffTime - day) * 24;
+    const hour = Math.floor(dayDiff);
+    const hourDiff = (dayDiff - hour) * 60;
+    const minute = Math.floor(hourDiff);
+    const minuteDiff = (hourDiff - minute) * 60;
+    const second = Math.floor(minuteDiff);
+    return `${this.zeroPadding(hour)}:${this.zeroPadding(
+      minute
+    )}:${this.zeroPadding(second)}`;
+  };
+
   componentDidMount() {
     const nextGuerrillaTime = this.nextGuerrillaTime();
     this.setState({ nextTime: nextGuerrillaTime });
@@ -75,7 +94,12 @@ export class GuerrillaTime extends Component {
         time: nextGuerrillaTime.toDate()
       }
     );
-    console.log(nextGuerrillaTime);
+
+    setInterval(() => {
+      this.setState({
+        date: this.diffCurrentTime(this.state.nextTime)
+      });
+    }, 1000 * 1);
   }
 
   render() {
