@@ -37,7 +37,7 @@ export class Timer extends Component {
       this.setState({
         date: this.diffCurrentTime(this.props.endDate)
       });
-    }, 1000 * 30);
+    }, 1000 * 1);
   }
 
   render() {
