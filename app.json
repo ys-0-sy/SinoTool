@@ -19,10 +19,12 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.ys0sy.sinotool"
+      "bundleIdentifier": "com.ys0sy.sinotool",
+      "buildNumber": "2"
     },
     "android": {
-      "package": "com.ys0sy.sinotool"
+      "package": "com.ys0sy.sinotool",
+      "versionCode": 2
     },
     "description": ""
   },
