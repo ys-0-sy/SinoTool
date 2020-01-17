@@ -34,6 +34,8 @@ export class Home extends Component {
   componentDidUpdate() {}
 
   async componentDidMount() {
+    Notifications.cancelAllScheduledNotificationsAsync();
+
     let result = await Permissions.askAsync(Permissions.NOTIFICATIONS);
     if (Constants.isDevice && result.status === "granted") {
       console.log("Notification permissions granted.");

@@ -69,9 +69,7 @@ export class GuerrillaTime extends Component {
   };
 
   diffCurrentTime = targetDate => {
-    console.log(targetDate);
     const diffTime = moment(targetDate).diff(moment(), "days", true);
-    console.log(diffTime);
     const day = Math.floor(diffTime);
     const dayDiff = (diffTime - day) * 24;
     const hour = Math.floor(dayDiff);
@@ -88,12 +86,15 @@ export class GuerrillaTime extends Component {
     const nextGuerrillaTime = this.nextGuerrillaTime();
     this.setState({ nextTime: nextGuerrillaTime });
 
-    Notifications.scheduleLocalNotificationAsync(
-      { title: "SinoTool 討伐時間のお知らせ", body: "討伐開始です！" },
-      {
-        time: nextGuerrillaTime.toDate()
-      }
-    );
+    this.state.guerrillaTime.map(time => {
+      Notifications.scheduleLocalNotificationAsync(
+        { title: "SinoTool 討伐時間のお知らせ", body: "討伐開始です！" },
+        {
+          time: moment(moment().format("YYYY-MM-DD ") + time).toDate(),
+          repeat: "day"
+        }
+      );
+    });
 
     setInterval(() => {
       this.setState({
@@ -155,27 +156,22 @@ export class GuerrillaTime extends Component {
             style={[
               styles.base_box,
               {
-                flexDirection: "row",
-                alignContent: "center",
-                alignSelf: "center",
-                alignItems: "center",
                 margin: 5,
                 marginRight: 30,
                 marginLeft: 30,
-                borderRadius: 30
+                padding: 5,
+                paddingBottom: 0,
+                borderRadius: 14,
+                textAlign: "center"
               }
             ]}
           >
-            <Text
-              style={[styles.text_small_bold, { flex: 1, textAlign: "center" }]}
-            >
-              次回開始まで
-            </Text>
-            <Text style={[styles.text_small_bold, { flex: 1 }]}>
-              {this.state.date}
+            <Text style={styles.text_small_bold}>
+              次回開始まで　{this.state.date}
             </Text>
           </View>
         </View>
+
         <Image
           style={{ flex: 2, height: 75, resizeMode: "contain" }}
           source={require("../assets/pinokio.png")}
@@ -225,6 +221,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 3,
     borderColor: "#707070",
-    padding: 3
+    padding: 3,
+    marginLeft: 5
   }
 });
