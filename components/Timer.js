@@ -6,7 +6,7 @@ export class Timer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: "-日 --:--"
+      date: "--日 --:--"
     };
   }
 
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 3,
     borderColor: "#707070",
-    padding: 3,
+    padding: 5,
     margin: 5,
     marginRight: 0,
     width: 100,
@@ -69,8 +69,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 14,
     borderColor: "#707070",
-    paddingRight: 15,
-    paddingLeft: 15
+    paddingRight: 10,
+    paddingLeft: 10
   },
   text_small_bold: {
     fontSize: 13,

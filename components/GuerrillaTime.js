@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import moment from "moment";
+import { Notifications } from "expo";
 
 export class GuerrillaTime extends Component {
   constructor(props) {
@@ -53,7 +54,15 @@ export class GuerrillaTime extends Component {
     );
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    Notifications.scheduleLocalNotificationAsync(
+      { title: "SinoTool", body: "test Notification" },
+      {
+        time: new Date().getTime() + 10000,
+        repeat: "minute"
+      }
+    );
+  }
 
   render() {
     return (
@@ -120,10 +129,7 @@ export class GuerrillaTime extends Component {
             ]}
           >
             <Text
-              style={[
-                styles.text_small_bold,
-                { flex: 1, textAlign: "center", marginTop: 8 }
-              ]}
+              style={[styles.text_small_bold, { flex: 1, textAlign: "center" }]}
             >
               次回開始まで
             </Text>
