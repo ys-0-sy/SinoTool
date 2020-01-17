@@ -7,8 +7,17 @@ import {
   TouchableHighlightBase
 } from "react-native";
 import { Timer } from "./Timer";
-//import { CachedImage } from "react-native-cached-image";
+import { Asset } from "expo-asset";
 
+function cacheImages(images) {
+  return images.map(image => {
+    if (typeof image === "string") {
+      return Image.prefetch(image);
+    } else {
+      return Asset.fromModule(image).downloadAsync();
+    }
+  });
+}
 export class Event extends Component {
   constructor(props) {
     super(props);

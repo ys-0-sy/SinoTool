@@ -7,7 +7,7 @@ import {
   Image,
   ScrollView
 } from "react-native";
-import { Header } from "./components/Header";
+import { Header } from "./Header";
 import { ConstantEvents } from "./ConstantEvents";
 import { GuerrillaEvents } from "./GuerrillaEvents";
 import { AppLoading, SplashScreen, Notifications } from "expo";
@@ -16,8 +16,8 @@ import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
 
 import { connect } from "react-redux";
-import { setEvent, setEventImgUrl } from "./src/containers/actions";
-import { store } from "./src/containers/store";
+import { setEvent, setEventImgUrl } from "../src/containers/actions";
+import { store } from "../src/containers/store";
 
 export class Home extends Component {
   constructor(props) {
@@ -26,7 +26,8 @@ export class Home extends Component {
       isSplashReady: false,
       isAppReady: false,
       scrollAreaHeight: Number,
-      isNotificationPermitted: false
+      isNotificationPermitted: false,
+      isNotificationPusshed: false
     };
   }
 
@@ -65,7 +66,7 @@ export class Home extends Component {
           }}
         >
           <Image
-            source={require("./assets/images/splash.gif")}
+            source={require("../assets/images/splash.gif")}
             onLoad={this._cacheResourcesAsync}
           />
         </View>
@@ -83,10 +84,6 @@ export class Home extends Component {
             >
               <ConstantEvents events={constantEvents} />
               <GuerrillaEvents events={guerrillaEvents} />
-              <Text>
-                Notification Permission:
-                {this.state.isNotificationPermitted ? "○" : "×"}
-              </Text>
             </SafeAreaView>
           </ScrollView>
         </SafeAreaView>
@@ -95,7 +92,7 @@ export class Home extends Component {
   }
 
   _cacheSplashResourcesAsync = async () => {
-    const gif = require("./assets/images/splash.gif");
+    const gif = require("../assets/images/splash.gif");
     return Asset.fromModule(gif).downloadAsync();
   };
 

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
-import moment from "moment";
+import moment, { months } from "moment";
+import { Notifications } from "expo";
 
 export class GuerrillaTime extends Component {
   constructor(props) {
@@ -16,9 +17,24 @@ export class GuerrillaTime extends Component {
         "23:30"
       ],
       date: "--:--",
-      nextDate: moment()
+      nextTime: moment().add(1, "months")
     };
   }
+
+  nextGuerrillaTime = () => {
+    let nextTime = moment().add(1, "months");
+    this.state.guerrillaTime.forEach(time => {
+      if (this.isFuture(time) && this.compareWithTime(time, nextTime)) {
+        nextTime = moment(moment().format("YYYY-MM-DD ") + time);
+      }
+    });
+    return nextTime;
+  };
+
+  zeroPadding = num => {
+    return ("00" + num).slice(-2);
+  };
+
   diffCurrentTime = targetDate => {
     if (this.isUndefined(targetDate)) {
       return "-日 --:--";
@@ -39,9 +55,8 @@ export class GuerrillaTime extends Component {
     return 0 <= moment(moment().format("YYYY-MM-DD ") + time).diff(moment());
   };
 
-  isNext = () => {
-    this.state.guerrillaTime;
-    console.log(moment(moment().format("YYYY-MM-DD ") + time).diff(moment()));
+  compareWithTime = (time, nextTime) => {
+    return 0 >= moment(moment().format("YYYY-MM-DD ") + time).diff(nextTime);
   };
 
   isNow = time => {
@@ -53,7 +68,39 @@ export class GuerrillaTime extends Component {
     );
   };
 
-  componentDidMount() {}
+  diffCurrentTime = targetDate => {
+    console.log(targetDate);
+    const diffTime = moment(targetDate).diff(moment(), "days", true);
+    console.log(diffTime);
+    const day = Math.floor(diffTime);
+    const dayDiff = (diffTime - day) * 24;
+    const hour = Math.floor(dayDiff);
+    const hourDiff = (dayDiff - hour) * 60;
+    const minute = Math.floor(hourDiff);
+    const minuteDiff = (hourDiff - minute) * 60;
+    const second = Math.floor(minuteDiff);
+    return `${this.zeroPadding(hour)}:${this.zeroPadding(
+      minute
+    )}:${this.zeroPadding(second)}`;
+  };
+
+  componentDidMount() {
+    const nextGuerrillaTime = this.nextGuerrillaTime();
+    this.setState({ nextTime: nextGuerrillaTime });
+
+    Notifications.scheduleLocalNotificationAsync(
+      { title: "SinoTool 討伐時間のお知らせ", body: "討伐開始です！" },
+      {
+        time: nextGuerrillaTime.toDate()
+      }
+    );
+
+    setInterval(() => {
+      this.setState({
+        date: this.diffCurrentTime(this.state.nextTime)
+      });
+    }, 1000 * 1);
+  }
 
   render() {
     return (
@@ -120,10 +167,7 @@ export class GuerrillaTime extends Component {
             ]}
           >
             <Text
-              style={[
-                styles.text_small_bold,
-                { flex: 1, textAlign: "center", marginTop: 8 }
-              ]}
+              style={[styles.text_small_bold, { flex: 1, textAlign: "center" }]}
             >
               次回開始まで
             </Text>

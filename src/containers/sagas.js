@@ -15,7 +15,7 @@ function* fetchEvents() {
   } else {
     console.warn(err);
   }
-  console.log(snapshot);
+  //console.log(snapshot);
   for (let i = 0; i < snapshot.length; i++) {
     const { url, err } = yield call(fetchImgUrl, snapshot[i].image);
     if (url) {
