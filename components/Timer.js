@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import moment from "moment";
 
-export class Timer extends Component {
+export default class Timer extends Component {
   constructor(props) {
     super(props);
     this.state = {

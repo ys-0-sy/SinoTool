@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import {
   StyleSheet,
   Text,
@@ -7,31 +8,22 @@ import {
   Image,
   ScrollView
 } from "react-native";
-import { Header } from "./Header";
-import { ConstantEvents } from "./ConstantEvents";
-import { GuerrillaEvents } from "./GuerrillaEvents";
+import Header from "./Header";
+import ConstantEvents from "./ConstantEvents";
+import GuerrillaEvents from "./GuerrillaEvents";
 import { AppLoading, SplashScreen, Notifications } from "expo";
 import { Asset } from "expo-asset";
 import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
-
-import { connect } from "react-redux";
-import { setEvent, setEventImgUrl } from "../src/containers/actions";
-import { store } from "../src/containers/store";
 
 export class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isSplashReady: false,
-      isAppReady: false,
-      scrollAreaHeight: Number,
-      isNotificationPermitted: false,
-      isNotificationPusshed: false
+      isAppReady: false
     };
   }
-
-  componentDidUpdate() {}
 
   async componentDidMount() {
     Notifications.cancelAllScheduledNotificationsAsync();
@@ -43,9 +35,6 @@ export class Home extends Component {
   }
 
   render() {
-    const constantEvents = this.props.constantEvents;
-    const guerrillaEvents = this.props.guerrillaEvents;
-
     if (!this.state.isSplashReady) {
       return (
         <AppLoading
@@ -84,8 +73,8 @@ export class Home extends Component {
                 marginBottom: 100
               }}
             >
-              <ConstantEvents events={constantEvents} />
-              <GuerrillaEvents events={guerrillaEvents} />
+              <ConstantEvents />
+              <GuerrillaEvents />
             </SafeAreaView>
           </ScrollView>
         </SafeAreaView>
@@ -129,15 +118,12 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = state => ({
-  eventsAll: state.events.eventsAll,
-  constantEvents: state.events.constantEvents,
-  guerrillaEvents: state.events.guerrillaEvents
-});
-
-const mapDispachToProps = {
-  setEvent,
-  setEventImgUrl
+const mapStateToProps = state => {
+  return {
+    constantEvents: state.events.constantEvents
+  };
 };
+
+const mapDispachToProps = {};
 
 export default connect(mapStateToProps, mapDispachToProps)(Home);

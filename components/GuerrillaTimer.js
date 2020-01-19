@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import moment, { months } from "moment";
 import { Notifications } from "expo";
 
-export class GuerrillaTime extends Component {
+export default class GuerrillaTimer extends Component {
   constructor(props) {
     super(props);
     this.state = {
