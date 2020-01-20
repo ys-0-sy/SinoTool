@@ -1,12 +1,6 @@
 import React, { Component } from "react";
-import {
-  View,
-  StyleSheet,
-  Image,
-  Text,
-  TouchableHighlightBase
-} from "react-native";
-import { Timer } from "./Timer";
+import { View, StyleSheet, Image, Text } from "react-native";
+import Timer from "./Timer";
 import { Asset } from "expo-asset";
 
 function cacheImages(images) {
@@ -18,7 +12,7 @@ function cacheImages(images) {
     }
   });
 }
-export class Event extends Component {
+export default class Event extends Component {
   constructor(props) {
     super(props);
   }

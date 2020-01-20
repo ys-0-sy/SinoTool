@@ -10,3 +10,14 @@ export const setEventImgUrl = (index, imgUrl) => ({
   index: index,
   imgUrl: imgUrl
 });
+
+export const setGuerrillaList = event => ({
+  type: "SET_GUERRILLALIST",
+  event: event
+});
+
+export const setGuerrillaListImgUrl = (index, imgUrl) => ({
+  type: "SET_GUERRILLALIST_IMGURL",
+  index: index,
+  imgUrl: imgUrl
+});

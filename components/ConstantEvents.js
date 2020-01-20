@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Event } from "./Event";
+import Event from "./Event";
+import { connect } from "react-redux";
 
 export class ConstantEvents extends Component {
   constructor(props) {
@@ -14,7 +15,7 @@ export class ConstantEvents extends Component {
       <View style={styles.content_block}>
         <Text style={styles.title_bold}>開催中のイベント</Text>
         <View style={styles.base_box}>
-          {this.props.events.map(event => {
+          {this.props.constantEvents.map(event => {
             if (
               event.endDate >= Date.now() &&
               event.startDate <= Date.now() &&
@@ -47,3 +48,11 @@ const styles = StyleSheet.create({
     padding: 3
   }
 });
+
+const mapStateToProps = state => {
+  return {
+    constantEvents: state.events.constantEvents
+  };
+};
+
+export default connect(mapStateToProps)(ConstantEvents);

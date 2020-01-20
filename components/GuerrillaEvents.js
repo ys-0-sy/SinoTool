@@ -1,12 +1,12 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { StyleSheet, Text, View } from "react-native";
-import { Event } from "./Event";
-import { GuerrillaTime } from "./GuerrillaTime";
+import Event from "./Event";
+import GuerrillaTimer from "./GuerrillaTimer";
 
 export class GuerrillaEvents extends Component {
   constructor(props) {
     super(props);
-    console.log(this.state);
   }
 
   render() {
@@ -16,16 +16,23 @@ export class GuerrillaEvents extends Component {
       <View style={styles.content_block}>
         <Text style={styles.title_bold}>討伐イベント</Text>
         <View style={styles.base_box}>
-          {this.props.events.map(event => {
+          {this.props.guerrillaEvents.map(event => {
             if (
               event.endDate >= Date.now() &&
               event.startDate <= Date.now() &&
               event.endDate <= limitDate
             ) {
-              return <Event key={event.name} event={event} />;
+              return (
+                <View>
+                  <Event key={event.id} event={event} />
+                  <GuerrillaTimer
+                    key={event.name}
+                    guerrilla={event.guerrilla}
+                  />
+                </View>
+              );
             }
           })}
-          <GuerrillaTime />
         </View>
       </View>
     );
@@ -59,3 +66,11 @@ const styles = StyleSheet.create({
     padding: 3
   }
 });
+
+const mapStateToProps = state => {
+  return {
+    guerrillaEvents: state.events.guerrillaEvents
+  };
+};
+
+export default connect(mapStateToProps)(GuerrillaEvents);
