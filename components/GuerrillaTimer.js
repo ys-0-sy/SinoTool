@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { View, Text, StyleSheet, Image } from "react-native";
-import moment, { months } from "moment";
 import { Notifications } from "expo";
+import moment from "moment";
+import React, { Component } from "react";
+import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
+import { connect } from "react-redux";
 
 export class GuerrillaTimer extends Component {
   constructor(props) {
@@ -80,6 +80,10 @@ export class GuerrillaTimer extends Component {
     return `${this.zeroPadding(hour)}:${this.zeroPadding(
       minute
     )}:${this.zeroPadding(second)}`;
+  };
+
+  isUndefined = valiable => {
+    return typeof valiable === "undefined";
   };
 
   guerrillaIcon = () => {
@@ -176,12 +180,27 @@ export class GuerrillaTimer extends Component {
             </Text>
           </View>
         </View>
-
-        <Image
-          style={{ flex: 2, height: 75, resizeMode: "contain" }}
-          source={{ uri: this.guerrillaIcon() }}
-          loadingIndicatorSource={require("../assets/pinokio.png")}
-        />
+        {!this.isUndefined(this.props.guerrilla.imgUrl) ? (
+          <Image
+            style={[
+              { flex: 2, height: 75, width: 75, resizeMode: "contain" },
+              { backgroundColor: "#ffffff" }
+            ]}
+            source={{ uri: this.guerrillaIcon() }}
+            loadingIndicatorSource={
+              <ActivityIndicator size="Large" color="#000000" />
+            }
+          />
+        ) : (
+          <ActivityIndicator
+            style={[
+              { flex: 2, height: 75, width: 10, resizeMode: "contain" },
+              { backgroundColor: "#dddddd" }
+            ]}
+            size="large"
+            color="#000000"
+          />
+        )}
       </View>
     );
   }
