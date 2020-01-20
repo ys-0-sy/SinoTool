@@ -22,10 +22,17 @@ export class GuerrillaEvents extends Component {
               event.startDate <= Date.now() &&
               event.endDate <= limitDate
             ) {
-              return <Event key={event.name} event={event} />;
+              return (
+                <View>
+                  <Event key={event.id} event={event} />
+                  <GuerrillaTimer
+                    key={event.name}
+                    guerrilla={event.guerrilla}
+                  />
+                </View>
+              );
             }
           })}
-          <GuerrillaTimer />
         </View>
       </View>
     );

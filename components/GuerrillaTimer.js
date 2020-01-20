@@ -1,9 +1,10 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { View, Text, StyleSheet, Image } from "react-native";
 import moment, { months } from "moment";
 import { Notifications } from "expo";
 
-export default class GuerrillaTimer extends Component {
+export class GuerrillaTimer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -51,7 +52,6 @@ export default class GuerrillaTimer extends Component {
   };
 
   isFuture = time => {
-    //console.log(moment(moment().format("YYYY-MM-DD ") + time).diff(moment()));
     return 0 <= moment(moment().format("YYYY-MM-DD ") + time).diff(moment());
   };
 
@@ -82,13 +82,18 @@ export default class GuerrillaTimer extends Component {
     )}:${this.zeroPadding(second)}`;
   };
 
+  guerrillaIcon = () => {
+    const url = this.props.guerrilla.imgUrl;
+    return url;
+  };
+
   componentDidMount() {
     const nextGuerrillaTime = this.nextGuerrillaTime();
     this.setState({ nextTime: nextGuerrillaTime });
 
     this.state.guerrillaTime.map(time => {
       Notifications.scheduleLocalNotificationAsync(
-        { title: "SinoTool 討伐時間のお知らせ", body: "討伐開始です！" },
+        { title: "討伐時間のお知らせ", body: "討伐開始です！" },
         {
           time: moment(moment().format("YYYY-MM-DD ") + time).toDate(),
           repeat: "day"
@@ -174,7 +179,8 @@ export default class GuerrillaTimer extends Component {
 
         <Image
           style={{ flex: 2, height: 75, resizeMode: "contain" }}
-          source={require("../assets/pinokio.png")}
+          source={{ uri: this.guerrillaIcon() }}
+          loadingIndicatorSource={require("../assets/pinokio.png")}
         />
       </View>
     );
@@ -225,3 +231,9 @@ const styles = StyleSheet.create({
     marginLeft: 5
   }
 });
+
+const mapStateToProps = state => {
+  return {};
+};
+
+export default connect(mapStateToProps)(GuerrillaTimer);

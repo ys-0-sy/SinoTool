@@ -24,9 +24,7 @@ export const fetchDb = async collection => {
       let events = [];
       snapshot.forEach((event, index) => {
         const newEvent = event.data();
-        newEvent.endDate = new Date(event.data().endDate.seconds * 1000);
-        newEvent.startDate = new Date(event.data().startDate.seconds * 1000);
-        events.push(newEvent);
+        events.push({ ...newEvent, id: event.id });
       });
       return events;
     })

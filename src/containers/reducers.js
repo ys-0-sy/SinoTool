@@ -1,10 +1,16 @@
-import { setEvent, setEventImgUrl } from "./actions";
+import {
+  setEvent,
+  setEventImgUrl,
+  setGuerrillaList,
+  setGuerrillaListImgUrl
+} from "./actions";
 import { combineReducers } from "redux";
 // reducers.js
 INITIAL_STATE = {
   eventsAll: new Array(),
   guerrillaEvents: new Array(),
-  constantEvents: new Array()
+  constantEvents: new Array(),
+  guerrillaList: new Array()
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
@@ -15,12 +21,12 @@ const reducer = (state = INITIAL_STATE, action) => {
         eventsAll: state.eventsAll.concat(action.event),
         guerrillaEvents: state.guerrillaEvents.concat(
           action.event.filter(event => {
-            return event.guerrilla;
+            return event.isGuerrilla;
           })
         ),
         constantEvents: state.constantEvents.concat(
           action.event.filter(event => {
-            return !event.guerrilla;
+            return !event.isGuerrilla;
           })
         )
       };
@@ -34,8 +40,27 @@ const reducer = (state = INITIAL_STATE, action) => {
       ];
       return Object.assign({}, state, {
         eventsAll: newEvent,
-        guerrillaEvents: newEvent.filter(event => event.guerrilla),
-        constantEvents: newEvent.filter(event => !event.guerrilla)
+        guerrillaEvents: newEvent.filter(event => event.isGuerrilla),
+        constantEvents: newEvent.filter(event => !event.isGuerrilla)
+      });
+    case "SET_GUERRILLALIST":
+      return {
+        ...state,
+        guerrillaList: state.guerrillaList.concat(action.event)
+      };
+    case "SET_GUERRILLALIST_IMGURL":
+      const newGuerrillaEvents = [
+        ...state.eventsAll.slice(0, action.index),
+        Object.assign({}, state.eventsAll[action.index], {
+          guerrilla: {
+            ...state.eventsAll[action.index].guerrilla,
+            imgUrl: action.imgUrl
+          }
+        }),
+        ...state.eventsAll.slice(action.index + 1)
+      ];
+      return Object.assign({}, state, {
+        guerrillaEvents: newGuerrillaEvents.filter(event => event.isGuerrilla)
       });
     default:
       return state;
