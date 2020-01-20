@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import { View, StyleSheet, Image, Text } from "react-native";
-import Timer from "./Timer";
 import { Asset } from "expo-asset";
+import React, { Component } from "react";
+import { ActivityIndicator, Image, StyleSheet, View } from "react-native";
+import Timer from "./Timer";
 
 function cacheImages(images) {
   return images.map(image => {
@@ -27,14 +27,20 @@ export default class Event extends Component {
     if (!this.isUndefined(event.imgUrl)) {
       image = (
         <Image
-          style={styles.image}
+          style={[styles.image, { backgroundColor: "#dddddd" }]}
           source={{ uri: event.imgUrl }}
-          loadingIndicatorSource={require("../assets/event1.png")}
+          loadingIndicatorSource={
+            <ActivityIndicator size="Large" color="#000000" />
+          }
         />
       );
     } else {
       image = (
-        <Image style={styles.image} source={require("../assets/event1.png")} />
+        <ActivityIndicator
+          style={[styles.image, { backgroundColor: "#dddddd" }]}
+          size="large"
+          color="#000000"
+        />
       );
     }
 
