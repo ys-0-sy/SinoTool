@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     height: 75,
+    width: 100,
     resizeMode: "contain"
   },
   container: {
