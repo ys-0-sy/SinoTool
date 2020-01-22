@@ -93,20 +93,23 @@ export class GuerrillaTimer extends Component {
   componentDidMount() {
     const nextGuerrillaTime = this.nextGuerrillaTime();
     this.setState({ nextTime: nextGuerrillaTime });
-
-    this.state.guerrillaTime.map(time => {
-      notifTime = this.isFuture(time)
-        ? this.convertToMoment(time)
-        : this.convertToMoment(time).add(1, "days");
-      console.log(notifTime.format());
-      Notifications.scheduleLocalNotificationAsync(
-        { title: "討伐時間のお知らせ", body: "討伐開始です！" },
-        {
-          time: notifTime.toDate(),
-          repeat: "day"
-        }
-      );
-    });
+    console.log("set state");
+    if (this.props.notificationState) {
+      this.state.guerrillaTime.map(time => {
+        notifTime = this.isFuture(time)
+          ? this.convertToMoment(time)
+          : this.convertToMoment(time).add(1, "days");
+        Notifications.scheduleLocalNotificationAsync(
+          { title: "討伐時間のお知らせ", body: "討伐開始です！" },
+          {
+            time: notifTime.toDate(),
+            repeat: "day"
+          }
+        );
+      });
+    } else {
+      Notifications.cancelAllScheduledNotificationsAsync();
+    }
 
     setInterval(() => {
       this.setState({
@@ -255,7 +258,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    notificationState: state.config.notificationState
+  };
 };
 
 export default connect(mapStateToProps)(GuerrillaTimer);

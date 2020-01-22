@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Switch } from "react-native";
 import Event from "./Event";
 import GuerrillaTimer from "./GuerrillaTimer";
 
@@ -14,8 +14,19 @@ export class GuerrillaEvents extends Component {
     limitDate.setMonth(limitDate.getDate() + 100);
     return (
       <View style={styles.content_block}>
-        <Text style={styles.title_bold}>討伐イベント</Text>
-        <View style={styles.base_box}>
+        <View style={{ flexDirection: "row" }}>
+          <Text style={[styles.title_bold, { flex: 5 }]}>討伐イベント</Text>
+          <Text style={[styles.title_bold, { flex: 1 }]}>通知</Text>
+          <Switch
+            style={{ flex: 1, alignItems: "flex-end", height: 15 }}
+            value={this.props.notificationState}
+            onValueChange={v => {
+              console.log(v);
+              this.props.actions.toggleNotificationState();
+            }}
+          />
+        </View>
+        <View style={[styles.base_box, { fontSize: 15 }]}>
           {this.props.guerrillaEvents.map(event => {
             if (
               event.endDate >= Date.now() &&
@@ -43,7 +54,7 @@ const styles = StyleSheet.create({
   content_block: {
     margin: 10,
     marginTop: 30,
-    paddingBottom: 50
+    paddingBottom: 100
   },
   text_small_bold: {
     width: 75,
@@ -69,8 +80,18 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    guerrillaEvents: state.events.guerrillaEvents
+    guerrillaEvents: state.events.guerrillaEvents,
+    notificationState: state.config.notificationState
   };
 };
 
-export default connect(mapStateToProps)(GuerrillaEvents);
+const mapDispatchToProps = dispatch => {
+  return {
+    actions: {
+      toggleNotificationState: () =>
+        dispatch({ type: "TOGGLE_NOTIFICATION_STATE" })
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(GuerrillaEvents);
