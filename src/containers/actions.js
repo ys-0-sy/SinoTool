@@ -21,3 +21,7 @@ export const setGuerrillaListImgUrl = (index, imgUrl) => ({
   index: index,
   imgUrl: imgUrl
 });
+
+export const toggleNotificationState = () => ({
+  type: "TOGGLE_NOTIFICATION_STATE"
+});

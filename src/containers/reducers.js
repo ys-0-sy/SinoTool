@@ -2,20 +2,22 @@ import {
   setEvent,
   setEventImgUrl,
   setGuerrillaList,
-  setGuerrillaListImgUrl
+  setGuerrillaListImgUrl,
+  toggleNotificationState
 } from "./actions";
-import { combineReducers } from "redux";
+
 // reducers.js
-INITIAL_STATE = {
+EVENT_INITIAL_STATE = {
   eventsAll: new Array(),
   guerrillaEvents: new Array(),
   constantEvents: new Array(),
   guerrillaList: new Array()
 };
 
-const reducer = (state = INITIAL_STATE, action) => {
+export const events = (state = EVENT_INITIAL_STATE, action) => {
   switch (action.type) {
     case "SET_EVENT":
+      console.log(state);
       return {
         ...state,
         eventsAll: state.eventsAll.concat(action.event),
@@ -49,7 +51,6 @@ const reducer = (state = INITIAL_STATE, action) => {
         guerrillaList: state.guerrillaList.concat(action.event)
       };
     case "SET_GUERRILLALIST_IMGURL":
-      console.log("reducer: setGuerrilaListImageURL");
       const newGuerrillaEvents = [
         ...state.eventsAll.slice(0, action.index),
         Object.assign({}, state.eventsAll[action.index], {
@@ -60,7 +61,6 @@ const reducer = (state = INITIAL_STATE, action) => {
         }),
         ...state.eventsAll.slice(action.index + 1)
       ];
-      console.log(newGuerrillaEvents.filter(event => event.isGuerrilla));
       return Object.assign({}, state, {
         eventsAll: newGuerrillaEvents,
         guerrillaEvents: newGuerrillaEvents.filter(event => event.isGuerrilla)
@@ -70,6 +70,19 @@ const reducer = (state = INITIAL_STATE, action) => {
   }
 };
 
-export const reducers = combineReducers({
-  events: reducer
-});
+CONFIG_INITIAL_STATE = {
+  notificationState: false
+};
+
+export const config = (state = CONFIG_INITIAL_STATE, action) => {
+  switch (action.type) {
+    case "TOGGLE_NOTIFICATION_STATE":
+      console.log(state.notificationState);
+      return {
+        ...state,
+        notificationState: !state.notificationState
+      };
+    default:
+      return state;
+  }
+};
