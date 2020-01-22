@@ -26,7 +26,7 @@ export class GuerrillaTimer extends Component {
     let nextTime = moment().add(1, "months");
     this.state.guerrillaTime.forEach(time => {
       if (this.isFuture(time) && this.compareWithTime(time, nextTime)) {
-        nextTime = moment(moment().format("YYYY-MM-DD ") + time);
+        nextTime = this.convertToMoment(time);
       }
     });
     return nextTime;
@@ -51,21 +51,20 @@ export class GuerrillaTimer extends Component {
     }
   };
 
+  convertToMoment = time => {
+    return moment(moment().format("YYYY-MM-DD ") + time);
+  };
+
   isFuture = time => {
-    return 0 <= moment(moment().format("YYYY-MM-DD ") + time).diff(moment());
+    return 0 <= this.convertToMoment(time).diff(moment());
   };
 
   compareWithTime = (time, nextTime) => {
-    return 0 >= moment(moment().format("YYYY-MM-DD ") + time).diff(nextTime);
+    return 0 >= this.convertToMoment(time).diff(nextTime);
   };
 
   isNow = time => {
-    return (
-      0 <=
-      moment(moment().format("YYYY-MM-DD ") + time).diff(
-        moment().subtract(30, "m")
-      )
-    );
+    return 0 <= this.convertToMoment(time).diff(moment().subtract(30, "m"));
   };
 
   diffCurrentTime = targetDate => {
@@ -96,10 +95,14 @@ export class GuerrillaTimer extends Component {
     this.setState({ nextTime: nextGuerrillaTime });
 
     this.state.guerrillaTime.map(time => {
+      notifTime = this.isFuture(time)
+        ? this.convertToMoment(time)
+        : this.convertToMoment(time).add(1, "days");
+      console.log(notifTime.format());
       Notifications.scheduleLocalNotificationAsync(
         { title: "討伐時間のお知らせ", body: "討伐開始です！" },
         {
-          time: moment(moment().format("YYYY-MM-DD ") + time).toDate(),
+          time: notifTime.toDate(),
           repeat: "day"
         }
       );
@@ -194,7 +197,7 @@ export class GuerrillaTimer extends Component {
         ) : (
           <ActivityIndicator
             style={[
-              { flex: 2, height: 75, width: 10, resizeMode: "contain" },
+              { flex: 2, height: 75, width: 75, resizeMode: "contain" },
               { backgroundColor: "#dddddd" }
             ]}
             size="large"

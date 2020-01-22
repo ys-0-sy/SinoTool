@@ -15,6 +15,7 @@ import { AppLoading, SplashScreen, Notifications } from "expo";
 import { Asset } from "expo-asset";
 import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
+import analytics from "../src/analytics";
 
 export class Home extends Component {
   constructor(props) {
