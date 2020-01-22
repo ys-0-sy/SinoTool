@@ -49,6 +49,7 @@ const reducer = (state = INITIAL_STATE, action) => {
         guerrillaList: state.guerrillaList.concat(action.event)
       };
     case "SET_GUERRILLALIST_IMGURL":
+      console.log("reducer: setGuerrilaListImageURL");
       const newGuerrillaEvents = [
         ...state.eventsAll.slice(0, action.index),
         Object.assign({}, state.eventsAll[action.index], {
@@ -59,7 +60,9 @@ const reducer = (state = INITIAL_STATE, action) => {
         }),
         ...state.eventsAll.slice(action.index + 1)
       ];
+      console.log(newGuerrillaEvents.filter(event => event.isGuerrilla));
       return Object.assign({}, state, {
+        eventsAll: newGuerrillaEvents,
         guerrillaEvents: newGuerrillaEvents.filter(event => event.isGuerrilla)
       });
     default:

@@ -197,7 +197,7 @@ export class GuerrillaTimer extends Component {
         ) : (
           <ActivityIndicator
             style={[
-              { flex: 2, height: 75, width: 10, resizeMode: "contain" },
+              { flex: 2, height: 75, width: 75, resizeMode: "contain" },
               { backgroundColor: "#dddddd" }
             ]}
             size="large"
