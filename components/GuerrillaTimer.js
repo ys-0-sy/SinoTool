@@ -8,15 +8,6 @@ export class GuerrillaTimer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      guerrillaTime: [
-        "01:30",
-        "02:30",
-        "08:30",
-        "12:00",
-        "17:30",
-        "20:30",
-        "23:30"
-      ],
       date: "--:--",
       nextTime: moment().add(1, "months")
     };
@@ -24,7 +15,7 @@ export class GuerrillaTimer extends Component {
 
   nextGuerrillaTime = () => {
     let nextTime = moment().add(1, "months");
-    this.state.guerrillaTime.forEach(time => {
+    this.props.guerrillaTime.forEach(time => {
       if (this.isFuture(time) && this.compareWithTime(time, nextTime)) {
         nextTime = this.convertToMoment(time);
       }
@@ -34,21 +25,6 @@ export class GuerrillaTimer extends Component {
 
   zeroPadding = num => {
     return ("00" + num).slice(-2);
-  };
-
-  diffCurrentTime = targetDate => {
-    if (this.isUndefined(targetDate)) {
-      return "-日 --:--";
-    } else {
-      const diffTime = moment(targetDate).diff(moment(), "days", true);
-      const secondDiff = hourDiff * 60;
-      const day = Math.floor(diffTime);
-      const dayDiff = (diffTime - day) * 60;
-      const hour = Math.floor(dayDiff);
-      const hourDiff = (dayDiff - hour) * 60;
-      const minute = Math.floor(hourDiff);
-      return `${day}日 ${this.zeroPadding(hour)}:${this.zeroPadding(minute)}`;
-    }
   };
 
   convertToMoment = time => {
@@ -91,25 +67,7 @@ export class GuerrillaTimer extends Component {
   };
 
   componentDidMount() {
-    const nextGuerrillaTime = this.nextGuerrillaTime();
-    this.setState({ nextTime: nextGuerrillaTime });
-    console.log("set state");
-    if (this.props.notificationState) {
-      this.state.guerrillaTime.map(time => {
-        notifTime = this.isFuture(time)
-          ? this.convertToMoment(time)
-          : this.convertToMoment(time).add(1, "days");
-        Notifications.scheduleLocalNotificationAsync(
-          { title: "討伐時間のお知らせ", body: "討伐開始です！" },
-          {
-            time: notifTime.toDate(),
-            repeat: "day"
-          }
-        );
-      });
-    } else {
-      Notifications.cancelAllScheduledNotificationsAsync();
-    }
+    this.setState({ nextTime: this.nextGuerrillaTime() });
 
     setInterval(() => {
       this.setState({
@@ -124,7 +82,7 @@ export class GuerrillaTimer extends Component {
         <View style={{ flex: 5 }}>
           <View style={[styles.base_box]}>
             <View style={[{ flexDirection: "row", borderWidth: 0 }]}>
-              {this.state.guerrillaTime.map((time, index) => {
+              {this.props.guerrillaTime.map((time, index) => {
                 if (index <= 3) {
                   return (
                     <Text
@@ -146,7 +104,7 @@ export class GuerrillaTimer extends Component {
             </View>
 
             <View style={[{ flexDirection: "row", borderWidth: 0 }]}>
-              {this.state.guerrillaTime.map((time, index) => {
+              {this.props.guerrillaTime.map((time, index) => {
                 if (index > 3) {
                   return (
                     <Text
@@ -259,7 +217,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    notificationState: state.config.notificationState
+    notificationState: state.config.notificationState,
+    guerrillaTime: state.config.guerrillaTime
   };
 };
 
