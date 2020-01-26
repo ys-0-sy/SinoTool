@@ -21,7 +21,6 @@ export class GuerrillaEvents extends Component {
             style={{ flex: 1, alignItems: "flex-end", height: 15 }}
             value={this.props.notificationState}
             onValueChange={v => {
-              console.log(v);
               this.props.actions.toggleNotificationState();
             }}
           />

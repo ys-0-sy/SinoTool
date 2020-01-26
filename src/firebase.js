@@ -1,5 +1,6 @@
 import firebase from "firebase";
 import firestore from "@firebase/firestore";
+import * as FileSystem from "expo-file-system";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCaBK5yrFrfEHV6SzSnLHF5gYSvv9UaZ4w",
@@ -37,16 +38,31 @@ export const fetchDb = async collection => {
     });
 };
 
-export const fetchImgUrl = imgPath => {
-  return firebase
-    .storage()
-    .ref()
-    .child(imgPath)
-    .getDownloadURL()
-    .then(url => {
-      return { url };
-    })
-    .catch(err => {
-      return { err };
-    });
+export const fetchImgUrl = async imgPath => {
+  try {
+    const cacheUri = `${FileSystem.cacheDirectory + imgPath}`;
+    const fileInfo = await FileSystem.getInfoAsync(cacheUri);
+    if (!fileInfo.exists) {
+      const folder = `${FileSystem.cacheDirectory}${imgPath
+        .split("/")
+        .slice(0, -1)}`;
+
+      const folderInfo = await FileSystem.getInfoAsync(folder);
+      if (!folderInfo.exists) {
+        await FileSystem.makeDirectoryAsync(folder, {
+          intermediates: true
+        });
+      }
+      const donwloadUrl = await firebase
+        .storage()
+        .ref()
+        .child(imgPath)
+        .getDownloadURL();
+      await FileSystem.downloadAsync(downloadUrl, cacheUri);
+    }
+    const url = cacheUri;
+    return { url };
+  } catch (err) {
+    throw { err };
+  }
 };

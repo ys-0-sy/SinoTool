@@ -6,6 +6,9 @@ import {
   toggleNotificationState
 } from "./actions";
 
+import { Notifications } from "expo";
+import moment from "moment";
+
 // reducers.js
 EVENT_INITIAL_STATE = {
   eventsAll: new Array(),
@@ -17,7 +20,6 @@ EVENT_INITIAL_STATE = {
 export const events = (state = EVENT_INITIAL_STATE, action) => {
   switch (action.type) {
     case "SET_EVENT":
-      console.log(state);
       return {
         ...state,
         eventsAll: state.eventsAll.concat(action.event),
@@ -71,13 +73,36 @@ export const events = (state = EVENT_INITIAL_STATE, action) => {
 };
 
 CONFIG_INITIAL_STATE = {
-  notificationState: false
+  notificationState: false,
+  guerrillaTime: ["01:30", "02:30", "08:30", "12:00", "17:30", "20:30", "23:30"]
 };
 
 export const config = (state = CONFIG_INITIAL_STATE, action) => {
   switch (action.type) {
     case "TOGGLE_NOTIFICATION_STATE":
-      console.log(state.notificationState);
+      convertToMoment = time => {
+        return moment(moment().format("YYYY-MM-DD ") + time);
+      };
+
+      isFuture = time => {
+        return 0 <= this.convertToMoment(time).diff(moment());
+      };
+      if (!state.notificationState) {
+        state.guerrillaTime.map(time => {
+          notifTime = this.isFuture(time)
+            ? this.convertToMoment(time)
+            : this.convertToMoment(time).add(1, "days");
+          Notifications.scheduleLocalNotificationAsync(
+            { title: "討伐時間のお知らせ", body: "討伐開始です！" },
+            {
+              time: notifTime.toDate(),
+              repeat: "day"
+            }
+          );
+        });
+      } else {
+        Notifications.cancelAllScheduledNotificationsAsync();
+      }
       return {
         ...state,
         notificationState: !state.notificationState
