@@ -53,7 +53,7 @@ export const fetchImgUrl = async imgPath => {
           intermediates: true
         });
       }
-      const donwloadUrl = await firebase
+      const downloadUrl = await firebase
         .storage()
         .ref()
         .child(imgPath)
