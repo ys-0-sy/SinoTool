@@ -20,7 +20,6 @@ EVENT_INITIAL_STATE = {
 export const events = (state = EVENT_INITIAL_STATE, action) => {
   switch (action.type) {
     case "SET_EVENT":
-      console.log(state);
       return {
         ...state,
         eventsAll: state.eventsAll.concat(action.event),
