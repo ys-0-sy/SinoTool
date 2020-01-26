@@ -11,7 +11,7 @@ export class GuerrillaEvents extends Component {
 
   render() {
     const limitDate = new Date();
-    limitDate.setMonth(limitDate.getDate() + 100);
+    limitDate.setMonth(limitDate.getMonth() + 1);
     return (
       <View style={styles.content_block}>
         <View style={{ flexDirection: "row" }}>

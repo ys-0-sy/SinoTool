@@ -10,7 +10,7 @@ export class ConstantEvents extends Component {
 
   render() {
     const limitDate = new Date();
-    limitDate.setMonth(limitDate.getDate() + 100);
+    limitDate.setMonth(limitDate.getMonth() + 1);
     return (
       <View style={styles.content_block}>
         <Text style={styles.title_bold}>開催中のイベント</Text>
