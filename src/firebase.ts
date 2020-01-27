@@ -1,5 +1,5 @@
-import firebase from "firebase";
-import firestore from "@firebase/firestore";
+import * as firebase from "firebase";
+import "firebase/firestore";
 import * as FileSystem from "expo-file-system";
 
 const firebaseConfig = {
@@ -23,7 +23,7 @@ export const fetchDb = async collection => {
     .then(snapshot => {
       console.log("get snapshot");
       let events = [];
-      snapshot.forEach((event, index) => {
+      snapshot.forEach(event => {
         const newEvent = event.data();
         events.push({ ...newEvent, id: event.id });
       });
@@ -38,7 +38,7 @@ export const fetchDb = async collection => {
     });
 };
 
-export const fetchImgUrl = async imgPath => {
+export const fetchImgUrl = async (imgPath: string): Promise<string> => {
   try {
     const cacheUri = `${FileSystem.cacheDirectory + imgPath}`;
     const fileInfo = await FileSystem.getInfoAsync(cacheUri);

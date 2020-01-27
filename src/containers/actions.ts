@@ -5,7 +5,7 @@ export const setEvent = event => ({
   event: event
 });
 
-export const setEventImgUrl = (index, imgUrl) => ({
+export const setEventImgUrl = (index: number, imgUrl: string) => ({
   type: "SET_EVENT_IMGURL",
   index: index,
   imgUrl: imgUrl
@@ -16,7 +16,7 @@ export const setGuerrillaList = event => ({
   event: event
 });
 
-export const setGuerrillaListImgUrl = (index, imgUrl) => ({
+export const setGuerrillaListImgUrl = (index: number, imgUrl: string) => ({
   type: "SET_GUERRILLALIST_IMGURL",
   index: index,
   imgUrl: imgUrl
