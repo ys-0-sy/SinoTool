@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-native",
+    "lib": ["dom", "esnext"],
+    "moduleResolution": "node",
+    "noEmit": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "module": "commonjs",
+    "target": "es6",
+    "strict": true,
+    "typeRoots": ["node_modules/@types", "screens/custom-types"],
+    "moduleResolution": "node",
+    "esModuleInterop": true
+  },
+  "include": ["./screens/**/*"],
+  "exclude": ["node_modules"]
+}

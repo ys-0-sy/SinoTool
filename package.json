@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.7.1",
+    "@types/react": "^16.9.19",
+    "@types/react-native": "^0.61.4",
     "expo": "^36.0.0",
     "expo-analytics-amplitude": "^8.0.0",
     "expo-blur": "~8.0.0",

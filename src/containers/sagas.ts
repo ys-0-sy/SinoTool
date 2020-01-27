@@ -7,10 +7,6 @@ import {
   setGuerrillaListImgUrl
 } from "./actions";
 
-Array.prototype.gForEach = function*(fn) {
-  for (let i = 0; i < this.length; i++) yield* fn(this[i], i, this);
-};
-
 function* fetchEvents() {
   console.log("fetchEvents function");
   const { snapshot, err } = yield call(fetchDb, "eventsList");

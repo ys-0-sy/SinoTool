@@ -10,7 +10,7 @@ import { Notifications } from "expo";
 import moment from "moment";
 
 // reducers.js
-EVENT_INITIAL_STATE = {
+const EVENT_INITIAL_STATE = {
   eventsAll: new Array(),
   guerrillaEvents: new Array(),
   constantEvents: new Array(),
@@ -72,7 +72,7 @@ export const events = (state = EVENT_INITIAL_STATE, action) => {
   }
 };
 
-CONFIG_INITIAL_STATE = {
+const CONFIG_INITIAL_STATE = {
   notificationState: false,
   guerrillaTime: ["01:30", "02:30", "08:30", "12:00", "17:30", "20:30", "23:30"]
 };
@@ -80,18 +80,18 @@ CONFIG_INITIAL_STATE = {
 export const config = (state = CONFIG_INITIAL_STATE, action) => {
   switch (action.type) {
     case "TOGGLE_NOTIFICATION_STATE":
-      convertToMoment = time => {
+      const convertToMoment = time => {
         return moment(moment().format("YYYY-MM-DD ") + time);
       };
 
-      isFuture = time => {
+      const isFuture = time => {
         return 0 <= this.convertToMoment(time).diff(moment());
       };
       if (!state.notificationState) {
         state.guerrillaTime.map(time => {
-          notifTime = this.isFuture(time)
-            ? this.convertToMoment(time)
-            : this.convertToMoment(time).add(1, "days");
+          const notifTime = isFuture(time)
+            ? convertToMoment(time)
+            : convertToMoment(time).add(1, "days");
           Notifications.scheduleLocalNotificationAsync(
             { title: "討伐時間のお知らせ", body: "討伐開始です！" },
             {
