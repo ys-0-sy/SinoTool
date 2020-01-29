@@ -85,7 +85,7 @@ export const config = (state = CONFIG_INITIAL_STATE, action) => {
       };
 
       const isFuture = time => {
-        return 0 <= this.convertToMoment(time).diff(moment());
+        return 0 <= convertToMoment(time).diff(moment());
       };
       if (!state.notificationState) {
         state.guerrillaTime.map(time => {

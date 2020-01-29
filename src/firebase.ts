@@ -15,30 +15,51 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-export const fetchDb = async collection => {
-  return firebase
-    .firestore()
-    .collection(collection)
-    .get()
-    .then(snapshot => {
-      console.log("get snapshot");
-      let events = [];
-      snapshot.forEach(event => {
-        const newEvent = event.data();
-        events.push({ ...newEvent, id: event.id });
-      });
-      return events;
-    })
-    .then(snapshot => {
-      return { snapshot };
-    })
-    .catch(err => {
-      console.warn("Error getting documents", err);
-      return { err };
-    });
+type Event = {
+  id: string;
+  endDate: firebase.firestore.Timestamp;
+  image: string;
+  isGuerrilla: boolean;
+  name: string;
+  startDate: firebase.firestore.Timestamp;
 };
 
-export const fetchImgUrl = async (imgPath: string): Promise<string> => {
+type ErrorObj = {
+  err: string;
+};
+
+export const fetchDb = async (
+  collection: string
+): Promise<{ snapshot: Event[] } | ErrorObj> => {
+  return (
+    firebase
+      .firestore()
+      .collection(collection)
+      .get()
+      .then(snapshot => {
+        console.log("get snapshot");
+        let events: Event[] = [];
+        snapshot.forEach(event => {
+          const newEvent = event.data() as Event;
+          events.push({ ...newEvent, id: event.id });
+        });
+        return {
+          snapshot: events
+        };
+      })
+      // .then(snapshot => {
+      //   return { snapshot };
+      // })
+      .catch(err => {
+        console.warn("Error getting documents", err);
+        return { err };
+      })
+  );
+};
+
+export const fetchImgUrl = async (
+  imgPath: string
+): Promise<{ url: string; err?: string }> => {
   try {
     const cacheUri = `${FileSystem.cacheDirectory + imgPath}`;
     const fileInfo = await FileSystem.getInfoAsync(cacheUri);
@@ -60,8 +81,7 @@ export const fetchImgUrl = async (imgPath: string): Promise<string> => {
         .getDownloadURL();
       await FileSystem.downloadAsync(downloadUrl, cacheUri);
     }
-    const url = cacheUri;
-    return { url };
+    return { url: cacheUri };
   } catch (err) {
     throw { err };
   }
