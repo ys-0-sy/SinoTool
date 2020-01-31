@@ -1,11 +1,21 @@
-import { Notifications } from "expo";
 import moment from "moment";
 import React, { Component } from "react";
 import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
 import { connect } from "react-redux";
 
-export class GuerrillaTimer extends Component {
-  constructor(props) {
+interface GuerrillaTimerProps {
+  guerrillaTime: string[];
+  guerrilla: any;
+}
+interface GuerrillaTimerState {
+  date: string;
+  nextTime: moment.Moment;
+}
+export class GuerrillaTimer extends Component<
+  GuerrillaTimerProps,
+  GuerrillaTimerState
+> {
+  constructor(props: GuerrillaTimerProps) {
     super(props);
     this.state = {
       date: "--:--",
@@ -13,9 +23,9 @@ export class GuerrillaTimer extends Component {
     };
   }
 
-  nextGuerrillaTime = () => {
+  nextGuerrillaTime = (): moment.Moment => {
     let nextTime = moment().add(1, "months");
-    this.props.guerrillaTime.forEach(time => {
+    this.props.guerrillaTime.forEach((time: string): void => {
       if (this.isFuture(time) && this.compareWithTime(time, nextTime)) {
         nextTime = this.convertToMoment(time);
       }
@@ -23,27 +33,27 @@ export class GuerrillaTimer extends Component {
     return nextTime;
   };
 
-  zeroPadding = num => {
+  zeroPadding = (num: number): string => {
     return ("00" + num).slice(-2);
   };
 
-  convertToMoment = time => {
+  convertToMoment = (time: string): moment.Moment => {
     return moment(moment().format("YYYY-MM-DD ") + time);
   };
 
-  isFuture = time => {
+  isFuture = (time: string): boolean => {
     return 0 <= this.convertToMoment(time).diff(moment());
   };
 
-  compareWithTime = (time, nextTime) => {
+  compareWithTime = (time: string, nextTime: moment.Moment): boolean => {
     return 0 >= this.convertToMoment(time).diff(nextTime);
   };
 
-  isNow = time => {
+  isNow = (time: string): boolean => {
     return 0 <= this.convertToMoment(time).diff(moment().subtract(30, "m"));
   };
 
-  diffCurrentTime = targetDate => {
+  diffCurrentTime = (targetDate): string => {
     const diffTime = moment(targetDate).diff(moment(), "days", true);
     const day = Math.floor(diffTime);
     const dayDiff = (diffTime - day) * 24;
@@ -57,11 +67,11 @@ export class GuerrillaTimer extends Component {
     )}:${this.zeroPadding(second)}`;
   };
 
-  isUndefined = valiable => {
+  isUndefined = (valiable: any): boolean => {
     return typeof valiable === "undefined";
   };
 
-  guerrillaIcon = () => {
+  guerrillaIcon = (): string => {
     const url = this.props.guerrilla.imgUrl;
     return url;
   };
@@ -134,8 +144,7 @@ export class GuerrillaTimer extends Component {
                 marginLeft: 30,
                 padding: 5,
                 paddingBottom: 0,
-                borderRadius: 14,
-                textAlign: "center"
+                borderRadius: 14
               }
             ]}
           >
@@ -151,14 +160,11 @@ export class GuerrillaTimer extends Component {
               { backgroundColor: "#ffffff" }
             ]}
             source={{ uri: this.guerrillaIcon() }}
-            loadingIndicatorSource={
-              <ActivityIndicator size="Large" color="#000000" />
-            }
           />
         ) : (
           <ActivityIndicator
             style={[
-              { flex: 2, height: 75, width: 75, resizeMode: "contain" },
+              { flex: 2, height: 75, width: 75 },
               { backgroundColor: "#dddddd" }
             ]}
             size="large"

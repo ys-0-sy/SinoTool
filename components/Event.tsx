@@ -1,23 +1,17 @@
-import { Asset } from "expo-asset";
 import React, { Component } from "react";
 import { ActivityIndicator, Image, StyleSheet, View } from "react-native";
 import Timer from "./Timer";
 
-function cacheImages(images) {
-  return images.map(image => {
-    if (typeof image === "string") {
-      return Image.prefetch(image);
-    } else {
-      return Asset.fromModule(image).downloadAsync();
-    }
-  });
+interface EventProps {
+  event: any;
 }
-export default class Event extends Component {
-  constructor(props) {
+
+export default class Event extends Component<EventProps> {
+  constructor(props: EventProps) {
     super(props);
   }
 
-  isUndefined = valiable => {
+  isUndefined = (valiable: any): boolean => {
     return typeof valiable === "undefined";
   };
 
@@ -29,9 +23,6 @@ export default class Event extends Component {
         <Image
           style={[styles.image, { backgroundColor: "#dddddd" }]}
           source={{ uri: event.imgUrl }}
-          loadingIndicatorSource={
-            <ActivityIndicator size="Large" color="#000000" />
-          }
         />
       );
     } else {

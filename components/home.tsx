@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
   StyleSheet,
-  Text,
   View,
   SafeAreaView,
   Image,
@@ -15,10 +14,17 @@ import { AppLoading, SplashScreen, Notifications } from "expo";
 import { Asset } from "expo-asset";
 import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
-import analytics from "../src/analytics";
 
-export class Home extends Component {
-  constructor(props) {
+interface HomeProps {
+  constantEvents: any;
+}
+
+interface HomeState {
+  isSplashReady: boolean;
+  isAppReady: boolean;
+}
+export class Home extends Component<HomeProps, HomeState> {
+  constructor(props: HomeProps) {
     super(props);
     this.state = {
       isSplashReady: false,

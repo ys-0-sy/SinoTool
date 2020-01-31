@@ -31,30 +31,24 @@ type ErrorObj = {
 export const fetchDb = async (
   collection: string
 ): Promise<{ snapshot: Event[] } | ErrorObj> => {
-  return (
-    firebase
+  try {
+    const snapshot = await firebase
       .firestore()
       .collection(collection)
-      .get()
-      .then(snapshot => {
-        console.log("get snapshot");
-        let events: Event[] = [];
-        snapshot.forEach(event => {
-          const newEvent = event.data() as Event;
-          events.push({ ...newEvent, id: event.id });
-        });
-        return {
-          snapshot: events
-        };
-      })
-      // .then(snapshot => {
-      //   return { snapshot };
-      // })
-      .catch(err => {
-        console.warn("Error getting documents", err);
-        return { err };
-      })
-  );
+      .get();
+
+    let events: Event[] = [];
+    snapshot.forEach(event => {
+      const newEvent = event.data() as Event;
+      events.push({ ...newEvent, id: event.id });
+    });
+    return {
+      snapshot: events
+    };
+  } catch (err) {
+    console.warn("Error getting documents", err);
+    throw { err };
+  }
 };
 
 export const fetchImgUrl = async (

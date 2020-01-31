@@ -4,8 +4,13 @@ import { StyleSheet, Text, View, Switch } from "react-native";
 import Event from "./Event";
 import GuerrillaTimer from "./GuerrillaTimer";
 
-export class GuerrillaEvents extends Component {
-  constructor(props) {
+interface GuerrillaEventsProps {
+  notificationState: any;
+  actions: any;
+  guerrillaEvents: any;
+}
+export class GuerrillaEvents extends Component<GuerrillaEventsProps> {
+  constructor(props: GuerrillaEventsProps) {
     super(props);
   }
 
@@ -20,12 +25,12 @@ export class GuerrillaEvents extends Component {
           <Switch
             style={{ flex: 1, alignItems: "flex-end", height: 15 }}
             value={this.props.notificationState}
-            onValueChange={v => {
+            onValueChange={() => {
               this.props.actions.toggleNotificationState();
             }}
           />
         </View>
-        <View style={[styles.base_box, { fontSize: 15 }]}>
+        <View style={styles.base_box}>
           {this.props.guerrillaEvents.map(event => {
             if (
               event.endDate >= Date.now() &&
