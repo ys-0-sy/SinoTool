@@ -7,9 +7,9 @@ import {
   Image,
   ScrollView
 } from "react-native";
-import Header from "./Header";
-import ConstantEvents from "./ConstantEvents";
-import GuerrillaEvents from "./GuerrillaEvents";
+import Header from "../components/Header";
+import ConstantEvents from "../components/ConstantEvents";
+import GuerrillaEvents from "../components/GuerrillaEvents";
 import { AppLoading, SplashScreen, Notifications } from "expo";
 import { Asset } from "expo-asset";
 import * as Permissions from "expo-permissions";
@@ -64,7 +64,7 @@ export class Home extends Component<HomeProps, HomeState> {
           }}
         >
           <Image
-            source={require("../assets/images/splash.gif")}
+            source={require("../../assets/images/splash.gif")}
             onLoad={this._cacheResourcesAsync}
           />
         </View>
@@ -90,7 +90,7 @@ export class Home extends Component<HomeProps, HomeState> {
   }
 
   _cacheSplashResourcesAsync = async () => {
-    const gif = require("../assets/images/splash.gif");
+    const gif = require("../../assets/images/splash.gif");
     return Asset.fromModule(gif).downloadAsync();
   };
 

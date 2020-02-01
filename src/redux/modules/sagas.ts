@@ -3,9 +3,8 @@ import { fetchDb, fetchImgUrl } from "../firebase";
 import {
   setEvent,
   setEventImgUrl,
-  setGuerrillaList,
   setGuerrillaListImgUrl
-} from "./actions";
+} from "./actionCreators";
 
 function* fetchEvents() {
   console.log("fetchEvents function");

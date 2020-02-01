@@ -1,0 +1,4 @@
+export const SET_EVENT = "SET_EVENT" as const;
+export const SET_EVENT_IMGURL = "SET_EVENT_IMGURL" as const;
+export const SET_GUERRILLALIST_IMGURL = "SET_GUERRILLALIST_IMGURL" as const;
+export const TOGGLE_NOTIFICATION_STATE = "TOGGLE_NOTIFICATION_STATE" as const;

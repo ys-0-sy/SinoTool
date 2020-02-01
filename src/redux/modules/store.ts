@@ -4,14 +4,9 @@ import { persistStore, persistReducer } from "redux-persist";
 import { AsyncStorage } from "react-native";
 import createSagaMiddleware from "redux-saga";
 import { events, config } from "./reducers";
-import { createLogger } from "redux-logger";
 import mySaga from "./sagas";
-// store.js
-const logger = createLogger({
-  diff: true,
-  collapsed: true
-});
 
+// store.js
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
