@@ -1,14 +1,12 @@
 import { fork, call, put } from "redux-saga/effects";
-import { fetchDb, fetchImgUrl } from "../firebase";
-import {
-  setEvent,
-  setEventImgUrl,
-  setGuerrillaListImgUrl
-} from "./actionCreators";
+import { fetchDb, fetchImgUrl } from "./modules/firebase";
+import { EventActions } from "./events/actions";
+
+type ReturnfetchDb = { snapshot: Event[]; err?: string };
 
 function* fetchEvents() {
   console.log("fetchEvents function");
-  const { snapshot, err } = yield call(fetchDb, "eventsList");
+  const { snapshot, err }: ReturnfetchDb = yield call(fetchDb, "eventsList");
   console.log("fetched Data from db");
   if (snapshot) {
     const newEvents = snapshot.map(event => {
@@ -18,14 +16,14 @@ function* fetchEvents() {
         startDate: new Date(event.startDate.seconds * 1000)
       };
     });
-    yield put(setEvent(newEvents));
+    yield put(EventActions.setEvent(newEvents));
   } else {
     console.warn(err);
   }
   for (let i = 0; i < snapshot.length; i++) {
     const { url, err } = yield call(fetchImgUrl, snapshot[i].image);
     if (url) {
-      yield put(setEventImgUrl(i, url));
+      yield put(EventActions.setEventImgUrl(i, url));
     } else {
       console.warn(err);
     }
@@ -36,7 +34,7 @@ function* fetchEvents() {
         snapshot[i].guerrilla.image[0]
       );
       if (url) {
-        yield put(setGuerrillaListImgUrl(i, url));
+        yield put(EventActions.setGuerrillaListImgUrl(i, url));
       } else {
         console.warn(err);
       }
@@ -44,28 +42,8 @@ function* fetchEvents() {
   }
 }
 
-function* fetchGuerrillalist() {
-  console.log("fetchGuerrilla function");
-  const { snapshot, err } = yield call(fetchDb, "guerrillaList");
-  console.log("fetched Data from db");
-  if (snapshot) {
-    yield put(setGuerrillaList(snapshot));
-  } else {
-    console.warn(err);
-  }
-  for (let i = 0; i < snapshot.length; i++) {
-    const { url, err } = yield call(fetchImgUrl, snapshot[i].image[0]);
-    if (url) {
-      yield put(setGuerrillaListImgUrl(i, url));
-    } else {
-      console.warn(err);
-    }
-  }
-}
-
 function* mySaga() {
   yield fork(fetchEvents);
-  //yield fork(fetchGuerrillalist);
 }
 
 export default mySaga;

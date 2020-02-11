@@ -1,58 +1,56 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React from "react";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { StyleSheet, Text, View, Switch } from "react-native";
 import Event from "./Event";
-import GuerrillaTimer from "./GuerrillaTimer";
+import { GuerrillaTimer } from "./GuerrillaTimer";
+import { AppState } from '../redux/states'
 
-interface GuerrillaEventsProps {
-  notificationState: any;
-  actions: any;
-  guerrillaEvents: any;
+type GuerrillaEventsProps = {
 }
-export class GuerrillaEvents extends Component<GuerrillaEventsProps> {
-  constructor(props: GuerrillaEventsProps) {
-    super(props);
-  }
 
-  render() {
-    const limitDate = new Date();
-    limitDate.setMonth(limitDate.getMonth() + 1);
-    return (
-      <View style={styles.content_block}>
-        <View style={{ flexDirection: "row" }}>
-          <Text style={[styles.title_bold, { flex: 5 }]}>討伐イベント</Text>
-          <Text style={[styles.title_bold, { flex: 1 }]}>通知</Text>
-          <Switch
-            style={{ flex: 1, alignItems: "flex-end", height: 15 }}
-            value={this.props.notificationState}
-            onValueChange={() => {
-              this.props.actions.toggleNotificationState();
-            }}
-          />
-        </View>
-        <View style={styles.base_box}>
-          {this.props.guerrillaEvents.map(event => {
-            if (
-              event.endDate >= Date.now() &&
-              event.startDate <= Date.now() &&
-              event.endDate <= limitDate
-            ) {
-              return (
-                <View>
-                  <Event key={event.id} event={event} />
-                  <GuerrillaTimer
-                    key={event.name}
-                    guerrilla={event.guerrilla}
-                  />
-                </View>
-              );
-            }
-          })}
-        </View>
+const guerrillaEventsSelector = (state: AppState) => state.events.guerrillaEvents
+const notificationStateSelector = (state: AppState) => state.config.notificationState
+
+const GuerrillaEvents: React.FC<GuerrillaEventsProps> = props => {
+  const dispatch = useDispatch()
+  const guerrillaEvents = useSelector(guerrillaEventsSelector)
+  const notificationState = useSelector(notificationStateSelector)
+
+  const toggleNotificationState = () => dispatch(toggleNotificationState)
+  const limitDate = new Date();
+  limitDate.setMonth(limitDate.getMonth() + 1);
+  return (
+    <View style={styles.content_block}>
+      <View style={{ flexDirection: "row" }}>
+        <Text style={[styles.title_bold, { flex: 5 }]}>討伐イベント</Text>
+        <Text style={[styles.title_bold, { flex: 1 }]}>通知</Text>
+        <Switch
+          style={{ flex: 1, alignItems: "flex-end", height: 15 }}
+          value={notificationState}
+          onValueChange={() => {
+            props.actions.toggleNotificationState();
+          }}
+        />
       </View>
-    );
-  }
-}
+      <View style={styles.base_box}>
+        {guerrillaEvents.map(event => {
+          if (
+            event.endDate.getTime() >= Date.now() &&
+            event.startDate.getTime() <= Date.now() &&
+            event.endDate <= limitDate
+          ) {
+            return (
+              <View>
+                <Event key={event.id} event={event} />
+                <GuerrillaTimer key={event.id} guerrilla={event.guerrilla} />
+              </View>
+            );
+          }
+        })}
+      </View>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   content_block: {
@@ -92,7 +90,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     actions: {
-      toggleNotificationState: () =>
+      : () =>
         dispatch({ type: "TOGGLE_NOTIFICATION_STATE" })
     }
   };
