@@ -2,23 +2,28 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
   StyleSheet,
-  Text,
   View,
   SafeAreaView,
   Image,
   ScrollView
 } from "react-native";
-import Header from "./Header";
-import ConstantEvents from "./ConstantEvents";
-import GuerrillaEvents from "./GuerrillaEvents";
+import { Header } from "../components/Header";
+import { ConstantEvents } from "../components/ConstantEvents";
+import { GuerrillaEvents } from "../components/GuerrillaEvents";
 import { AppLoading, SplashScreen, Notifications } from "expo";
 import { Asset } from "expo-asset";
 import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
-import analytics from "../src/analytics";
 
-export class Home extends Component {
-  constructor(props) {
+type Props = {};
+
+type State = {
+  isSplashReady: boolean;
+  isAppReady: boolean;
+};
+
+export class Home extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       isSplashReady: false,
@@ -58,7 +63,7 @@ export class Home extends Component {
           }}
         >
           <Image
-            source={require("../assets/images/splash.gif")}
+            source={require("../../assets/images/splash.gif")}
             onLoad={this._cacheResourcesAsync}
           />
         </View>
@@ -84,7 +89,7 @@ export class Home extends Component {
   }
 
   _cacheSplashResourcesAsync = async () => {
-    const gif = require("../assets/images/splash.gif");
+    const gif = require("../../assets/images/splash.gif");
     return Asset.fromModule(gif).downloadAsync();
   };
 
@@ -118,13 +123,3 @@ const styles = StyleSheet.create({
     padding: 3
   }
 });
-
-const mapStateToProps = state => {
-  return {
-    constantEvents: state.events.constantEvents
-  };
-};
-
-const mapDispachToProps = {};
-
-export default connect(mapStateToProps, mapDispachToProps)(Home);

@@ -1,21 +1,19 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import moment from "moment";
 
-export default class Timer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      date: "--日 --:--"
-    };
-  }
+type Props = {
+  endDate: Date;
+};
 
-  zeroPadding = num => {
+export const Timer: React.FC<Props> = props => {
+  const [date, setDate] = useState("--日 --:--");
+  const zeroPadding = (num: number): string => {
     return ("00" + num).slice(-2);
   };
 
-  diffCurrentTime = targetDate => {
-    if (this.isUndefined(targetDate)) {
+  const diffCurrentTime = (targetDate: Date | undefined): string => {
+    if (isUndefined(targetDate)) {
       return "-日 --:--";
     } else {
       const diffTime = moment(targetDate).diff(moment(), "days", true);
@@ -24,33 +22,32 @@ export default class Timer extends Component {
       const hour = Math.floor(dayDiff);
       const hourDiff = (dayDiff - hour) * 60;
       const minute = Math.floor(hourDiff);
-      return `${day}日 ${this.zeroPadding(hour)}:${this.zeroPadding(minute)}`;
+      return `${day}日 ${zeroPadding(hour)}:${zeroPadding(minute)}`;
     }
   };
 
-  isUndefined = valiable => {
+  const isUndefined = (valiable: any): boolean => {
     return typeof valiable === "undefined";
   };
 
-  componentDidMount() {
-    setInterval(() => {
-      this.setState({
-        date: this.diffCurrentTime(this.props.endDate)
-      });
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setDate(diffCurrentTime(props.endDate));
     }, 1000 * 1);
-  }
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
 
-  render() {
-    return (
-      <View style={styles.base_box}>
-        <Text style={styles.text_small_bold}>終了まで</Text>
-        <View style={styles.timer_box}>
-          <Text style={styles.text_small_bold}>{this.state.date}</Text>
-        </View>
+  return (
+    <View style={styles.base_box}>
+      <Text style={styles.text_small_bold}>終了まで</Text>
+      <View style={styles.timer_box}>
+        <Text style={styles.text_small_bold}>{date}</Text>
       </View>
-    );
-  }
-}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   base_box: {

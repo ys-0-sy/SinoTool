@@ -15,12 +15,23 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-type Event = {
+export type FirebaseEvent = {
   id: string;
   endDate: firebase.firestore.Timestamp;
   image: string;
   isGuerrilla: boolean;
   name: string;
+  guerrilla?: {
+    AreaID: string[];
+    BannerResource: string[];
+    EnemyID: string;
+    ID: string;
+    KindID: string;
+    Name: string;
+    NightmareID: string;
+    image: string[];
+    imgUrl?: string;
+  };
   startDate: firebase.firestore.Timestamp;
 };
 
@@ -30,31 +41,25 @@ type ErrorObj = {
 
 export const fetchDb = async (
   collection: string
-): Promise<{ snapshot: Event[] } | ErrorObj> => {
-  return (
-    firebase
+): Promise<{ snapshot: FirebaseEvent[] } | ErrorObj> => {
+  try {
+    const snapshot = await firebase
       .firestore()
       .collection(collection)
-      .get()
-      .then(snapshot => {
-        console.log("get snapshot");
-        let events: Event[] = [];
-        snapshot.forEach(event => {
-          const newEvent = event.data() as Event;
-          events.push({ ...newEvent, id: event.id });
-        });
-        return {
-          snapshot: events
-        };
-      })
-      // .then(snapshot => {
-      //   return { snapshot };
-      // })
-      .catch(err => {
-        console.warn("Error getting documents", err);
-        return { err };
-      })
-  );
+      .get();
+
+    let events: FirebaseEvent[] = [];
+    snapshot.forEach(event => {
+      const newEvent = event.data() as FirebaseEvent;
+      events.push({ ...newEvent, id: event.id });
+    });
+    return {
+      snapshot: events
+    };
+  } catch (err) {
+    console.warn("Error getting documents", err);
+    throw { err };
+  }
 };
 
 export const fetchImgUrl = async (
