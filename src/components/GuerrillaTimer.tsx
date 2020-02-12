@@ -1,59 +1,70 @@
 import moment from "moment";
-import React, { Component } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { IInitialState } from "../redux/states";
 
-interface GuerrillaTimerProps {
-  guerrillaTime: string[];
-  guerrilla: any;
-}
-interface GuerrillaTimerState {
-  date: string;
-  nextTime: moment.Moment;
-}
-export class GuerrillaTimer extends Component<
-  GuerrillaTimerProps,
-  GuerrillaTimerState
-> {
-  constructor(props: GuerrillaTimerProps) {
-    super(props);
-    this.state = {
-      date: "--:--",
-      nextTime: moment().add(1, "months")
-    };
-  }
+type GuerrillaTimerProps = {
+  guerrilla: {
+    AreaID: string[];
+    BannerResource: string[];
+    EnemyID: string;
+    ID: string;
+    KindID: string;
+    Name: string;
+    NightmareID: string;
+    image: string[];
+    imgUrl?: string;
+  };
+};
 
-  nextGuerrillaTime = (): moment.Moment => {
+const guerrillaTimeSelector = (state: IInitialState) =>
+  state.config.guerrillaTime;
+
+export const GuerrillaTimer: React.FC<GuerrillaTimerProps> = props => {
+  const [date, setdate] = useState("--:--");
+  const [nextTime, setNextTime] = useState(moment().add(1, "months"));
+
+  const guerrillaTime = useSelector(guerrillaTimeSelector);
+  const refNextTime = useRef(nextTime);
+
+  const nextGuerrillaTime = (): moment.Moment => {
     let nextTime = moment().add(1, "months");
-    this.props.guerrillaTime.forEach((time: string): void => {
-      if (this.isFuture(time) && this.compareWithTime(time, nextTime)) {
-        nextTime = this.convertToMoment(time);
+    guerrillaTime.forEach((time: string): void => {
+      if (isFuture(time) && compareWithTime(time, nextTime)) {
+        nextTime = convertToMoment(time);
       }
     });
     return nextTime;
   };
-
-  zeroPadding = (num: number): string => {
+  const styleGuerrilla = (time: string) => {
+    return isFuture(time)
+      ? styles.text_small_bold
+      : isNow(time)
+      ? styles.text_small_bold_red
+      : styles.text_small_bold_unhilight;
+  };
+  const zeroPadding = (num: number): string => {
     return ("00" + num).slice(-2);
   };
 
-  convertToMoment = (time: string): moment.Moment => {
+  const convertToMoment = (time: string): moment.Moment => {
     return moment(moment().format("YYYY-MM-DD ") + time);
   };
 
-  isFuture = (time: string): boolean => {
-    return 0 <= this.convertToMoment(time).diff(moment());
+  const isFuture = (time: string): boolean => {
+    return 0 <= convertToMoment(time).diff(moment());
   };
 
-  compareWithTime = (time: string, nextTime: moment.Moment): boolean => {
-    return 0 >= this.convertToMoment(time).diff(nextTime);
+  const compareWithTime = (time: string, nextTime: moment.Moment): boolean => {
+    return 0 >= convertToMoment(time).diff(nextTime);
   };
 
-  isNow = (time: string): boolean => {
-    return 0 <= this.convertToMoment(time).diff(moment().subtract(30, "m"));
+  const isNow = (time: string): boolean => {
+    return 0 <= convertToMoment(time).diff(moment().subtract(30, "m"));
   };
 
-  diffCurrentTime = (targetDate): string => {
+  const diffCurrentTime = (targetDate: moment.Moment): string => {
     const diffTime = moment(targetDate).diff(moment(), "days", true);
     const day = Math.floor(diffTime);
     const dayDiff = (diffTime - day) * 24;
@@ -62,119 +73,80 @@ export class GuerrillaTimer extends Component<
     const minute = Math.floor(hourDiff);
     const minuteDiff = (hourDiff - minute) * 60;
     const second = Math.floor(minuteDiff);
-    return `${this.zeroPadding(hour)}:${this.zeroPadding(
-      minute
-    )}:${this.zeroPadding(second)}`;
+    return `${zeroPadding(hour)}:${zeroPadding(minute)}:${zeroPadding(second)}`;
   };
 
-  isUndefined = (valiable: any): boolean => {
+  const isUndefined = (valiable: any): boolean => {
     return typeof valiable === "undefined";
   };
 
-  guerrillaIcon = (): string => {
-    const url = this.props.guerrilla.imgUrl;
+  const guerrillaIcon = (): string => {
+    const url = props.guerrilla.imgUrl;
     return url;
   };
 
-  componentDidMount() {
-    this.setState({ nextTime: this.nextGuerrillaTime() });
-
-    setInterval(() => {
-      this.setState({
-        date: this.diffCurrentTime(this.state.nextTime)
-      });
+  useEffect(() => {
+    refNextTime.current = nextGuerrillaTime();
+  }, []);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setdate(diffCurrentTime(refNextTime.current));
     }, 1000 * 1);
-  }
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
 
-  render() {
-    return (
-      <View style={{ flexDirection: "row" }}>
-        <View style={{ flex: 5 }}>
-          <View style={[styles.base_box]}>
-            <View style={[{ flexDirection: "row", borderWidth: 0 }]}>
-              {this.props.guerrillaTime.map((time, index) => {
-                if (index <= 3) {
-                  return (
-                    <Text
-                      style={[
-                        styles.guerrilla_time,
-                        this.isFuture(time)
-                          ? styles.text_small_bold
-                          : this.isNow(time)
-                          ? styles.text_small_bold_red
-                          : styles.text_small_bold_unhilight
-                      ]}
-                      key={time}
-                    >
-                      {time}
-                    </Text>
-                  );
-                }
-              })}
-            </View>
-
-            <View style={[{ flexDirection: "row", borderWidth: 0 }]}>
-              {this.props.guerrillaTime.map((time, index) => {
-                if (index > 3) {
-                  return (
-                    <Text
-                      style={[
-                        styles.guerrilla_time,
-                        this.isFuture(time)
-                          ? styles.text_small_bold
-                          : this.isNow(time)
-                          ? styles.text_small_bold_red
-                          : styles.text_small_bold_unhilight
-                      ]}
-                      key={time}
-                    >
-                      {time}
-                    </Text>
-                  );
-                }
-              })}
-            </View>
-          </View>
-          <View
-            style={[
-              styles.base_box,
-              {
-                margin: 5,
-                marginRight: 30,
-                marginLeft: 30,
-                padding: 5,
-                paddingBottom: 0,
-                borderRadius: 14
+  return (
+    <View style={{ flexDirection: "row" }}>
+      <View style={{ flex: 5 }}>
+        <View style={[styles.base_box]}>
+          <View style={[{ flexDirection: "row", borderWidth: 0 }]}>
+            {guerrillaTime.map((time, index) => {
+              if (index <= 3) {
+                return (
+                  <Text
+                    style={[styles.guerrilla_time, styleGuerrilla(time)]}
+                    key={time}
+                  >
+                    {time}
+                  </Text>
+                );
               }
-            ]}
-          >
-            <Text style={styles.text_small_bold}>
-              次回開始まで　{this.state.date}
-            </Text>
+            })}
+          </View>
+
+          <View style={[{ flexDirection: "row", borderWidth: 0 }]}>
+            {guerrillaTime.map((time, index) => {
+              if (index > 3) {
+                return (
+                  <Text
+                    style={[styles.guerrilla_time, styleGuerrilla(time)]}
+                    key={time}
+                  >
+                    {time}
+                  </Text>
+                );
+              }
+            })}
           </View>
         </View>
-        {!this.isUndefined(this.props.guerrilla.imgUrl) ? (
-          <Image
-            style={[
-              { flex: 2, height: 75, width: 75, resizeMode: "contain" },
-              { backgroundColor: "#ffffff" }
-            ]}
-            source={{ uri: this.guerrillaIcon() }}
-          />
-        ) : (
-          <ActivityIndicator
-            style={[
-              { flex: 2, height: 75, width: 75 },
-              { backgroundColor: "#dddddd" }
-            ]}
-            size="large"
-            color="#000000"
-          />
-        )}
+        <View style={[styles.base_box, styles.guerrilla_box]}>
+          <Text style={styles.text_small_bold}>次回開始まで　{date}</Text>
+        </View>
       </View>
-    );
-  }
-}
+      {!isUndefined(props.guerrilla.imgUrl) ? (
+        <Image style={styles.icon_image} source={{ uri: guerrillaIcon() }} />
+      ) : (
+        <ActivityIndicator
+          style={styles.icon_loading}
+          size="large"
+          color="#000000"
+        />
+      )}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   content_block: {
@@ -218,14 +190,26 @@ const styles = StyleSheet.create({
     borderColor: "#707070",
     padding: 3,
     marginLeft: 5
+  },
+  icon_image: {
+    flex: 2,
+    height: 75,
+    width: 75,
+    resizeMode: "contain",
+    backgroundColor: "#ffffff"
+  },
+  icon_loading: {
+    flex: 2,
+    height: 75,
+    width: 75,
+    backgroundColor: "#dddddd"
+  },
+  guerrilla_box: {
+    margin: 5,
+    marginRight: 30,
+    marginLeft: 30,
+    padding: 5,
+    paddingBottom: 0,
+    borderRadius: 14
   }
 });
-
-const mapStateToProps = state => {
-  return {
-    notificationState: state.config.notificationState,
-    guerrillaTime: state.config.guerrillaTime
-  };
-};
-
-export default connect(mapStateToProps)(GuerrillaTimer);
