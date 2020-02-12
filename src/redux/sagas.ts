@@ -14,8 +14,8 @@ function* fetchEvents() {
     const newEvents: Event[] = snapshot.map(event => {
       return {
         ...event,
-        endDate: new Date(event.endDate.seconds * 1000),
-        startDate: new Date(event.startDate.seconds * 1000)
+        endDate: event.endDate.toDate(),
+        startDate: event.startDate.toDate()
       };
     });
     yield put(EventActions.setEvent({ event: newEvents }));

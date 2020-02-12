@@ -1,19 +1,17 @@
 import React from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { StyleSheet, Text, View, Switch } from "react-native";
-import Event from "./Event";
+import { RenderEvent } from "./RenderEvent";
 import { GuerrillaTimer } from "./GuerrillaTimer";
 import { IInitialState } from "../redux/states";
 import { ConfigActions } from "../redux/config/actions";
-
-type GuerrillaEventsProps = {};
 
 const guerrillaEventsSelector = (state: IInitialState) =>
   state.events.guerrillaEvents;
 const notificationStateSelector = (state: IInitialState) =>
   state.config.notificationState;
 
-const GuerrillaEvents: React.FC<GuerrillaEventsProps> = props => {
+export const GuerrillaEvents: React.FC = () => {
   const dispatch = useDispatch();
   const guerrillaEvents = useSelector(guerrillaEventsSelector);
   const notificationState = useSelector(notificationStateSelector);
@@ -36,13 +34,13 @@ const GuerrillaEvents: React.FC<GuerrillaEventsProps> = props => {
       <View style={styles.base_box}>
         {guerrillaEvents.map(event => {
           if (
-            event.endDate >= Date.now() &&
-            event.startDate <= Date.now() &&
+            event.endDate.getTime() >= Date.now() &&
+            event.startDate.getTime() <= Date.now() &&
             event.endDate <= limitDate
           ) {
             return (
               <View>
-                <Event key={event.id} event={event} />
+                <RenderEvent key={event.id} event={event} />
                 <GuerrillaTimer key={event.id} guerrilla={event.guerrilla} />
               </View>
             );
@@ -80,12 +78,3 @@ const styles = StyleSheet.create({
     padding: 3
   }
 });
-
-const mapStateToProps = state => {
-  return {
-    guerrillaEvents: state.events.guerrillaEvents,
-    notificationState: state.config.notificationState
-  };
-};
-
-export default connect(mapStateToProps)(GuerrillaEvents);

@@ -7,24 +7,23 @@ import {
   Image,
   ScrollView
 } from "react-native";
-import Header from "../components/Header";
-import ConstantEvents from "../components/ConstantEvents";
-import GuerrillaEvents from "../components/GuerrillaEvents";
+import { Header } from "../components/Header";
+import { ConstantEvents } from "../components/ConstantEvents";
+import { GuerrillaEvents } from "../components/GuerrillaEvents";
 import { AppLoading, SplashScreen, Notifications } from "expo";
 import { Asset } from "expo-asset";
 import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";
 
-interface HomeProps {
-  constantEvents: any;
-}
+type Props = {};
 
-interface HomeState {
+type State = {
   isSplashReady: boolean;
   isAppReady: boolean;
-}
-export class Home extends Component<HomeProps, HomeState> {
-  constructor(props: HomeProps) {
+};
+
+export class Home extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       isSplashReady: false,
@@ -124,13 +123,3 @@ const styles = StyleSheet.create({
     padding: 3
   }
 });
-
-const mapStateToProps = state => {
-  return {
-    constantEvents: state.events.constantEvents
-  };
-};
-
-const mapDispachToProps = {};
-
-export default connect(mapStateToProps, mapDispachToProps)(Home);

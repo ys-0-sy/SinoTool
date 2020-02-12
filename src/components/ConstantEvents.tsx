@@ -1,34 +1,33 @@
-import React, { Component } from "react";
+import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import Event from "./Event";
-import { connect } from "react-redux";
+import { RenderEvent } from "./RenderEvent";
+import { useSelector } from "react-redux";
+import { IInitialState } from "../redux/states";
 
-export class ConstantEvents extends Component {
-  constructor(props) {
-    super(props);
-  }
+const constantEventsSelector = (state: IInitialState) =>
+  state.events.constantEvents;
 
-  render() {
-    const limitDate = new Date();
-    limitDate.setMonth(limitDate.getMonth() + 1);
-    return (
-      <View style={styles.content_block}>
-        <Text style={styles.title_bold}>開催中のイベント</Text>
-        <View style={styles.base_box}>
-          {this.props.constantEvents.map(event => {
-            if (
-              event.endDate >= Date.now() &&
-              event.startDate <= Date.now() &&
-              event.endDate <= limitDate
-            ) {
-              return <Event key={event.name} event={event} />;
-            }
-          })}
-        </View>
+export const ConstantEvents: React.FC = () => {
+  const constantEvents = useSelector(constantEventsSelector);
+  const limitDate = new Date();
+  limitDate.setMonth(limitDate.getMonth() + 1);
+  return (
+    <View style={styles.content_block}>
+      <Text style={styles.title_bold}>開催中のイベント</Text>
+      <View style={styles.base_box}>
+        {constantEvents.map(event => {
+          if (
+            event.endDate.getTime() >= Date.now() &&
+            event.startDate.getTime() <= Date.now() &&
+            event.endDate <= limitDate
+          ) {
+            return <RenderEvent key={event.name} event={event} />;
+          }
+        })}
       </View>
-    );
-  }
-}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   content_block: {
@@ -48,11 +47,3 @@ const styles = StyleSheet.create({
     padding: 3
   }
 });
-
-const mapStateToProps = state => {
-  return {
-    constantEvents: state.events.constantEvents
-  };
-};
-
-export default connect(mapStateToProps)(ConstantEvents);

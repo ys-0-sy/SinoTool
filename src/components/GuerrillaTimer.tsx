@@ -4,7 +4,7 @@ import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { IInitialState } from "../redux/states";
 
-type GuerrillaTimerProps = {
+type Props = {
   guerrilla: {
     AreaID: string[];
     BannerResource: string[];
@@ -21,7 +21,7 @@ type GuerrillaTimerProps = {
 const guerrillaTimeSelector = (state: IInitialState) =>
   state.config.guerrillaTime;
 
-export const GuerrillaTimer: React.FC<GuerrillaTimerProps> = props => {
+export const GuerrillaTimer: React.FC<Props> = props => {
   const [date, setdate] = useState("--:--");
   const [nextTime, setNextTime] = useState(moment().add(1, "months"));
 
