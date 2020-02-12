@@ -4,7 +4,7 @@ import { Event } from "./states";
 const actionCreator = actionCreatorFactory("events");
 
 export interface IEventsPayload {
-  event: Event;
+  event: Event[];
 }
 
 export type IImgEventsPayload = {

@@ -7,6 +7,7 @@ import {
   IEventsState,
   EventsInitialState
 } from ".";
+import { GuerrillaEvent } from "./states";
 
 export const eventsReducer = reducerWithInitialState(EventsInitialState)
   .case(
@@ -18,12 +19,12 @@ export const eventsReducer = reducerWithInitialState(EventsInitialState)
       return {
         ...state,
         eventsAll: state.eventsAll.concat(payload.event),
-        guerrillaEvents: payload.event.isGuerrilla
-          ? state.guerrillaEvents.concat(payload.event)
-          : state.guerrillaEvents,
-        constantEvents: !payload.event.isGuerrilla
-          ? state.constantEvents.concat(payload.event)
-          : state.constantEvents
+        guerrillaEvents: state.guerrillaEvents.concat(
+          payload.event.filter(event => event.isGuerrilla) as GuerrillaEvent[]
+        ),
+        constantEvents: state.constantEvents.concat(
+          payload.event.filter(event => !event.isGuerrilla)
+        )
       };
     }
   )

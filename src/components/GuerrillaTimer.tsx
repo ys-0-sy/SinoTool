@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { useState, useEffect, useRef } from "react";
 import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { AppState, ActionTypes } from "../redux/modules/store";
+import { IInitialState } from "../redux/states";
 
 type GuerrillaTimerProps = {
   guerrilla: {
@@ -18,7 +18,8 @@ type GuerrillaTimerProps = {
   };
 };
 
-const guerrillaTimeSelector = (state: AppState) => state.config.guerrillaTime;
+const guerrillaTimeSelector = (state: IInitialState) =>
+  state.config.guerrillaTime;
 
 export const GuerrillaTimer: React.FC<GuerrillaTimerProps> = props => {
   const [date, setdate] = useState("--:--");

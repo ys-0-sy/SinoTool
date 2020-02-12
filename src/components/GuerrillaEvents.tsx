@@ -3,20 +3,23 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { StyleSheet, Text, View, Switch } from "react-native";
 import Event from "./Event";
 import { GuerrillaTimer } from "./GuerrillaTimer";
-import { AppState } from '../redux/states'
+import { IInitialState } from "../redux/states";
+import { ConfigActions } from "../redux/config/actions";
 
-type GuerrillaEventsProps = {
-}
+type GuerrillaEventsProps = {};
 
-const guerrillaEventsSelector = (state: AppState) => state.events.guerrillaEvents
-const notificationStateSelector = (state: AppState) => state.config.notificationState
+const guerrillaEventsSelector = (state: IInitialState) =>
+  state.events.guerrillaEvents;
+const notificationStateSelector = (state: IInitialState) =>
+  state.config.notificationState;
 
 const GuerrillaEvents: React.FC<GuerrillaEventsProps> = props => {
-  const dispatch = useDispatch()
-  const guerrillaEvents = useSelector(guerrillaEventsSelector)
-  const notificationState = useSelector(notificationStateSelector)
+  const dispatch = useDispatch();
+  const guerrillaEvents = useSelector(guerrillaEventsSelector);
+  const notificationState = useSelector(notificationStateSelector);
 
-  const toggleNotificationState = () => dispatch(toggleNotificationState)
+  const toggleNotificationState = () =>
+    dispatch(ConfigActions.toggleNotificationState);
   const limitDate = new Date();
   limitDate.setMonth(limitDate.getMonth() + 1);
   return (
@@ -27,16 +30,14 @@ const GuerrillaEvents: React.FC<GuerrillaEventsProps> = props => {
         <Switch
           style={{ flex: 1, alignItems: "flex-end", height: 15 }}
           value={notificationState}
-          onValueChange={() => {
-            props.actions.toggleNotificationState();
-          }}
+          onValueChange={toggleNotificationState}
         />
       </View>
       <View style={styles.base_box}>
         {guerrillaEvents.map(event => {
           if (
-            event.endDate.getTime() >= Date.now() &&
-            event.startDate.getTime() <= Date.now() &&
+            event.endDate >= Date.now() &&
+            event.startDate <= Date.now() &&
             event.endDate <= limitDate
           ) {
             return (
@@ -87,13 +88,4 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    actions: {
-      : () =>
-        dispatch({ type: "TOGGLE_NOTIFICATION_STATE" })
-    }
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(GuerrillaEvents);
+export default connect(mapStateToProps)(GuerrillaEvents);

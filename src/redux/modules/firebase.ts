@@ -15,12 +15,23 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-type Event = {
+export type FirebaseEvent = {
   id: string;
   endDate: firebase.firestore.Timestamp;
   image: string;
   isGuerrilla: boolean;
   name: string;
+  guerrilla?: {
+    AreaID: string[];
+    BannerResource: string[];
+    EnemyID: string;
+    ID: string;
+    KindID: string;
+    Name: string;
+    NightmareID: string;
+    image: string[];
+    imgUrl?: string;
+  };
   startDate: firebase.firestore.Timestamp;
 };
 
@@ -30,16 +41,16 @@ type ErrorObj = {
 
 export const fetchDb = async (
   collection: string
-): Promise<{ snapshot: Event[] } | ErrorObj> => {
+): Promise<{ snapshot: FirebaseEvent[] } | ErrorObj> => {
   try {
     const snapshot = await firebase
       .firestore()
       .collection(collection)
       .get();
 
-    let events: Event[] = [];
+    let events: FirebaseEvent[] = [];
     snapshot.forEach(event => {
-      const newEvent = event.data() as Event;
+      const newEvent = event.data() as FirebaseEvent;
       events.push({ ...newEvent, id: event.id });
     });
     return {
