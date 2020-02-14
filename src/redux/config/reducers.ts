@@ -20,6 +20,7 @@ const isFuture = time => {
 export const configReducer = reducerWithInitialState(ConfigInitialState).case(
   ConfigActions.toggleNotificationState,
   (state: Readonly<IConfigState>): IConfigState => {
+    console.log("reducers");
     if (!state.notificationState) {
       state.guerrillaTime.map(time => {
         const notifTime = isFuture(time)

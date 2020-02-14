@@ -20,6 +20,7 @@ export const GuerrillaEvents: React.FC = () => {
     dispatch(ConfigActions.toggleNotificationState);
   const limitDate = new Date();
   limitDate.setMonth(limitDate.getMonth() + 1);
+  console.log(notificationState);
   return (
     <View style={styles.content_block}>
       <View style={{ flexDirection: "row" }}>
@@ -28,7 +29,10 @@ export const GuerrillaEvents: React.FC = () => {
         <Switch
           style={{ flex: 1, alignItems: "flex-end", height: 15 }}
           value={notificationState}
-          onValueChange={toggleNotificationState}
+          onValueChange={v => {
+            console.log(v);
+            toggleNotificationState;
+          }}
         />
       </View>
       <View style={styles.base_box}>
