@@ -9,11 +9,11 @@ import {
   IConfigPayload
 } from ".";
 
-const convertToMoment = (time: String) => {
+const convertToMoment = (time: String): moment.Moment => {
   return moment(moment().format("YYYY-MM-DD ") + time);
 };
 
-const isFuture = time => {
+const isFuture = (time: string): boolean => {
   return 0 <= convertToMoment(time).diff(moment());
 };
 
