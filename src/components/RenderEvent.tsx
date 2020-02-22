@@ -15,10 +15,7 @@ export const RenderEvent: React.FC<Props> = props => {
   let image: JSX.Element;
   if (!isUndefined(props.event.imgUrl)) {
     image = (
-      <Image
-        style={[styles.image, { backgroundColor: "#dddddd" }]}
-        source={{ uri: props.event.imgUrl }}
-      />
+      <Image style={[styles.image]} source={{ uri: props.event.imgUrl }} />
     );
   } else {
     image = (
