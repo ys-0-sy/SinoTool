@@ -9,18 +9,17 @@ import {
   IConfigPayload
 } from ".";
 
-const convertToMoment = (time: String) => {
+const convertToMoment = (time: String): moment.Moment => {
   return moment(moment().format("YYYY-MM-DD ") + time);
 };
 
-const isFuture = time => {
+const isFuture = (time: string): boolean => {
   return 0 <= convertToMoment(time).diff(moment());
 };
 
 export const configReducer = reducerWithInitialState(ConfigInitialState).case(
   ConfigActions.toggleNotificationState,
   (state: Readonly<IConfigState>): IConfigState => {
-    console.log("reducers");
     if (!state.notificationState) {
       state.guerrillaTime.map(time => {
         const notifTime = isFuture(time)

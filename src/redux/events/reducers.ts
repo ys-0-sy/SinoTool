@@ -32,7 +32,7 @@ export const eventsReducer = reducerWithInitialState(EventsInitialState)
     EventActions.setEventImgUrl,
     (
       state: Readonly<IEventsState>,
-      payload: IImgEventsPayload
+      payload: Readonly<IImgEventsPayload>
     ): IEventsState => {
       const newEvent = [
         ...state.eventsAll.slice(0, payload.index),
@@ -52,7 +52,7 @@ export const eventsReducer = reducerWithInitialState(EventsInitialState)
     EventActions.setGuerrillaListImgUrl,
     (
       state: Readonly<IEventsState>,
-      payload: IImgEventsPayload
+      payload: Readonly<IImgEventsPayload>
     ): IEventsState => {
       const newGuerrillaEvents = [
         ...state.eventsAll.slice(0, payload.index),

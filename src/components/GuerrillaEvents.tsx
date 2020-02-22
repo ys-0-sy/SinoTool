@@ -16,11 +16,8 @@ export const GuerrillaEvents: React.FC = () => {
   const guerrillaEvents = useSelector(guerrillaEventsSelector);
   const notificationState = useSelector(notificationStateSelector);
 
-  const toggleNotificationState = () =>
-    dispatch(ConfigActions.toggleNotificationState);
   const limitDate = new Date();
   limitDate.setMonth(limitDate.getMonth() + 1);
-  console.log(notificationState);
   return (
     <View style={styles.content_block}>
       <View style={{ flexDirection: "row" }}>
@@ -30,8 +27,7 @@ export const GuerrillaEvents: React.FC = () => {
           style={{ flex: 1, alignItems: "flex-end", height: 15 }}
           value={notificationState}
           onValueChange={v => {
-            console.log(v);
-            toggleNotificationState;
+            dispatch(ConfigActions.toggleNotificationState());
           }}
         />
       </View>
